@@ -1,0 +1,27 @@
+@import "tailwindcss";
+
+@theme {
+    --shodow-content-post:
+        0 0 15px rgba(56, 189, 248, 0.5), 0 0 5px rgba(56, 189, 248, 0.2);
+}
+
+@layer base {
+    h1 {
+        @apply text-5xl font-bold;
+    }
+    button {
+        @apply bg-blue-500 rounded-4xl py-2 px-1.5 items-end text-white hover:bg-red-500 focus:bg-red-500 focus:outline-none;
+    }
+}
+
+@utility main-default {
+    @apply px-50 py-30;
+}
+
+@utility main-form {
+    @apply flex flex-col gap-10 items-center shadow-md p-5 rounded-4xl;
+}
+
+@utility link_text {
+    @apply text-red-500 font-semibold;
+}

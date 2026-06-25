@@ -1,0 +1,18 @@
+{
+    "name": "wandervafla/php-blog",
+    "description": "Jobtrek Project Apprentissage",
+    "type": "project",
+    "autoload": {
+        "psr-4": {
+            "Wandervafla\\PhpBlog\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "WanderVafla"
+        }
+    ],
+    "require-dev": {
+        "laravel/pint": "^0.1.2"
+    }
+}
