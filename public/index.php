@@ -1,6 +1,6 @@
 <?php
 require_once "../src/components/post.php";
-
+require_once "../src/components/head.php";
 // For test
 $content = "
 If the CSS won't load at all—meaning you inspect the page in your browser and you either get a 404 Not Found error or none of the styles are applying—the issue is almost always how your browser/web server is resolving the file path.
@@ -11,12 +11,7 @@ Here is how to isolate and fix the connection completely:
 
 <!doctype html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>PHP blog</title>
-        <link href="output.css" rel="stylesheet" />
-    </head>
+    <?php head('PHP blog') ?>
     <body>
         <?php require "../src/components/nav.php"; ?>
         <main class="main-default">
