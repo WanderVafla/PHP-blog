@@ -1,17 +1,13 @@
 <?php
 // argument (string $type, name $name, string $placeholder)
 require_once '../src/components/input.php';
+require_once "../src/components/head.php";
 
 ?>
 
 <!doctype html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>PHP blog</title>
-        <link href="output.css" rel="stylesheet" />
-    </head>
+    <?php head('Login') ?>
     <body class="flex flex-col justify-center items-center w-lvw h-lvh gap-10">
         <h1>Sign in to your account</h1>
         <main class="main-form">

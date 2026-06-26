@@ -1,11 +1,12 @@
+<?php 
+
+require_once "../src/components/head.php";
+
+?>
+
 <!doctype html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>PHP blog</title>
-        <link href="output.css" rel="stylesheet" />
-    </head>
+    <?php head('Post page') ?>
     <body>
         <?php require "../src/components/nav.php"; ?>
             <!--Image of Post (DIV is test)-->
