@@ -31,11 +31,6 @@ require_once "../src/components/textarea.php";
                 ) ?>
                 <?php textarea(placeholder: 'Description'); ?>
                 <?php input_with_border(
-                    type: "text",
-                    name: "content",
-                    placeholder: "Description",
-                ) ?>
-                <?php input_with_border(
                     type: "file",
                     name: "title",
                     placeholder: "Image",
