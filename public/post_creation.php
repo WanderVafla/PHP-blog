@@ -27,7 +27,6 @@ try {
     if ($_SERVER["REQUEST_METHOD"] === "POST") {
         // valid CSRF-token
         validateCSRFToken();
-        $errors = [];
 
         $pdo = new PDO("sqlite:../db/database.db");
 
@@ -120,9 +119,9 @@ try {
                     name: "image",
                     placeholder: "Image",
                 ); ?>
-                <input type="hidden", name="csrf_token" value="<?php echo $_SESSION[
+                <input type="hidden" name="csrf_token" value="<?php echo $_SESSION[
                     "csrf_token"
-                ] ?>">
+                ]; ?>">
 
                 <button class="justify-end" type="submit">Publish</button>
             </form>
