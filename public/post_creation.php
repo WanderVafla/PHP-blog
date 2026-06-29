@@ -30,15 +30,15 @@ try {
         $image = $_FILES["image"];
 
         $finfo = new finfo(FILEINFO_MIME_TYPE);
-        $mimeType = $finfo->file($image['tmp_name']);
+        $mimeType = $finfo->file($image["tmp_name"]);
 
-        $allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+        $allowedTypes = ["image/jpeg", "image/png", "image/gif", "image/webp"];
 
         if (!in_array($mimeType, $allowedTypes)) {
             echo "Image format is not correct!";
             die();
         }
-        
+
         $content = $_POST["content"];
         $created_at = "test";
         $user_id = 1;
@@ -50,16 +50,14 @@ try {
         }
         $fileExtension = pathinfo($image["name"], PATHINFO_EXTENSION);
 
-        
-        
         $newFilename = bin2hex(random_bytes(8)) . "." . $fileExtension;
         $destination = $uploadDir . $newFilename;
 
         move_uploaded_file($image["tmp_name"], $destination);
 
-        $query = "INSERT INTO posts
+        $query = 'INSERT INTO posts
         (title, image, content, created_at, user_id) VALUES
-        (:title, :image, :content, :created_at, :user_id)";
+        (:title, :image, :content, :created_at, :user_id)';
 
         $stmt = $pdo->prepare($query);
 
