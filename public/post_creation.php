@@ -24,55 +24,61 @@ function validateCSRFToken()
     return true;
 }
 
+function validateData(string $title, array $image)
+{
+    if (
+        !filter_var($title, FILTER_CALLBACK, [
+            "options" => function ($value) {
+                if (strlen($value) > 60) {
+                    return false;
+                } else {
+                    return true;
+                }
+            },
+        ])
+    ) {
+        die("Oversize title!");
+    }
+
+    $finfo = new finfo(FILEINFO_MIME_TYPE);
+    $mimeType = $finfo->file($image["tmp_name"]);
+
+    $allowedTypes = ["image/jpeg", "image/png", "image/gif", "image/webp"];
+
+    if (!in_array($mimeType, $allowedTypes)) {
+        die('Image format is not correct!');
+    }
+}
+
+function saveImage(array $image): string {
+    $uploadDir = __DIR__ . "/images/";
+
+    if (!is_dir($uploadDir)) {
+        mkdir($uploadDir, 0755, true);
+    }
+    $fileExtension = pathinfo($image["name"], PATHINFO_EXTENSION);
+
+    $newFilename = bin2hex(random_bytes(8)) . "." . $fileExtension;
+    $destination = $uploadDir . $newFilename;
+
+    move_uploaded_file($image["tmp_name"], $destination);
+    return $destination;
+}
+
 try {
     if ($_SERVER["REQUEST_METHOD"] === "POST") {
-        // valid CSRF-token
         validateCSRFToken();
 
         $title = $_POST["title"];
-
-        if (
-            !filter_var($title, FILTER_CALLBACK, [
-                "options" => function ($value) {
-                    if (strlen($value) > 60) {
-                        return false;
-                    } else {
-                        return true;
-                    }
-                },
-            ])
-        ) {
-            echo "Oversize title!";
-            die();
-        }
-
         $image = $_FILES["image"];
-
-        $finfo = new finfo(FILEINFO_MIME_TYPE);
-        $mimeType = $finfo->file($image["tmp_name"]);
-
-        $allowedTypes = ["image/jpeg", "image/png", "image/gif", "image/webp"];
-
-        if (!in_array($mimeType, $allowedTypes)) {
-            echo "Image format is not correct!";
-            die();
-        }
+        
+        validateData($title, $image);
 
         $content = $_POST["content"];
         $created_at = "test";
         $user_id = 1;
 
-        $uploadDir = __DIR__ . "/images/";
-
-        if (!is_dir($uploadDir)) {
-            mkdir($uploadDir, 0755, true);
-        }
-        $fileExtension = pathinfo($image["name"], PATHINFO_EXTENSION);
-
-        $newFilename = bin2hex(random_bytes(8)) . "." . $fileExtension;
-        $destination = $uploadDir . $newFilename;
-
-        move_uploaded_file($image["tmp_name"], $destination);
+        $destination = saveImage($image);
 
         $query = 'INSERT INTO posts
         (title, image, content, created_at, user_id) VALUES
