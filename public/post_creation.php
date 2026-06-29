@@ -51,7 +51,7 @@ function validateData(string $title, array $image)
 }
 
 function saveImage(array $image): string {
-    $uploadDir = __DIR__ . "/images/";
+    $uploadDir = "./images/";
 
     if (!is_dir($uploadDir)) {
         mkdir($uploadDir, 0755, true);
