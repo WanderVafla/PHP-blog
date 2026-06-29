@@ -3,7 +3,6 @@
 require_once "../src/components/input.php";
 require_once "../src/components/textarea.php";
 require_once "../src/components/head.php";
-require_once "../src/querys/create_post.php";
 
 try {
     if ($_SERVER["REQUEST_METHOD"] === "POST") {
