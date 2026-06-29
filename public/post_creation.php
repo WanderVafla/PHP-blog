@@ -95,7 +95,7 @@ try {
         ]);
     }
 } catch (PDOException $e) {
-    print_r($e);
+    die('Query failed: ' . $e->getMessage());
 }
 ?>
 
