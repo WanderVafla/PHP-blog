@@ -1,12 +1,15 @@
 <?php
 require_once '../src/components/post.php';
 require_once '../src/components/head.php';
-// For test
-$content = "
-If the CSS won't load at all—meaning you inspect the page in your browser and you either get a 404 Not Found error or none of the styles are applying—the issue is almost always how your browser/web server is resolving the file path.
-Because you are writing a raw PHP project, pathing can get tricky depending on how you are serving the files (e.g., using localhost:8000, Apache, or just opening files).
-Here is how to isolate and fix the connection completely:
-";
+
+require_once "../src/db.php";
+
+try {
+    $posts = $pdo->query('SELECT * FROM posts');
+} catch (PDOException $e) {
+    die('Query failed: ' . $e->getMessage());
+}
+
 ?>
 
 <!doctype html>
@@ -23,9 +26,9 @@ Here is how to isolate and fix the connection completely:
 
             <div class="grid grid-cols-4 gap-5">
 
-                <?php for ($i = 0; $i < 120; $i++): ?>
-                    <?php post(content: $content, title: 'Title post'); ?>
-                <?php endfor; ?>
+                <?php foreach ($posts as $post): ?>
+                    <?php post(content: $post['content'], title: $post['title'], path: $post['image']); ?>
+                <?php endforeach; ?>
 
             </div>
         </div>
