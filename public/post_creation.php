@@ -9,6 +9,7 @@ if (empty($_SESSION["csrf_token"])) {
 require_once "../src/components/input.php";
 require_once "../src/components/textarea.php";
 require_once "../src/components/head.php";
+require_once "../src/db.php";
 
 // check CSRF-token
 function validateCSRFToken()
@@ -27,8 +28,6 @@ try {
     if ($_SERVER["REQUEST_METHOD"] === "POST") {
         // valid CSRF-token
         validateCSRFToken();
-
-        $pdo = new PDO("sqlite:../db/database.db");
 
         $title = $_POST["title"];
 
