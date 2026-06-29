@@ -1,5 +1,5 @@
 <?php
-function textarea(string $name = "", string $placeholder = "")
+function textarea(string $name = '', string $placeholder = '')
 {
     ?>
 
