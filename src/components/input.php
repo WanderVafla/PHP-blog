@@ -1,8 +1,8 @@
 <?php function input_with_border(
     string $type,
-    string $id = "",
-    string $name = "",
-    string $placeholder = "",
+    string $id = '',
+    string $name = '',
+    string $placeholder = '',
 ) {
     ?>
 

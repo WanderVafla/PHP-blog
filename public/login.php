@@ -1,7 +1,7 @@
 <?php
 // argument (string $type, name $name, string $placeholder)
 require_once '../src/components/input.php';
-require_once "../src/components/head.php";
+require_once '../src/components/head.php';
 
 ?>
 
@@ -13,7 +13,7 @@ require_once "../src/components/head.php";
         <main class="main-form">
             <form class="flex flex-col w-110 gap-5">
                 <label for="sing-in-email">Email address</label>
-                <?php input_with_border(type: 'text', placeholder: "email"); ?>
+                <?php input_with_border(type: 'text', placeholder: 'email'); ?>
                 <!--<input id="sing-in-email" type="email" name="email" />-->
                 
                 <label for="sing-in-password">Password</label>
