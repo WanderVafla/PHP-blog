@@ -1,11 +1,32 @@
 <?php
-// argument (string $type, name $name, string $placeholder)
+session_start();
+
+// generate new csrf_token if we not have
+if (empty($_SESSION["csrf_token"])) {
+    $_SESSION["csrf_token"] = bin2hex(random_bytes(32));
+}
+
 require_once "../src/components/input.php";
 require_once "../src/components/textarea.php";
 require_once "../src/components/head.php";
 
+// check CSRF-token
+function validateCSRFToken()
+{
+    if (
+        !isset($_POST["csrf_token"]) ||
+        !isset($_SESSION["csrf_token"]) ||
+        !hash_equals($_SESSION["csrf_token"], $_POST["csrf_token"])
+    ) {
+        die("CSRF token validation failed");
+    }
+    return true;
+}
+
 try {
     if ($_SERVER["REQUEST_METHOD"] === "POST") {
+        // valid CSRF-token
+        validateCSRFToken();
         $errors = [];
 
         $pdo = new PDO("sqlite:../db/database.db");
@@ -99,6 +120,9 @@ try {
                     name: "image",
                     placeholder: "Image",
                 ); ?>
+                <input type="hidden", name="csrf_token" value="<?php echo $_SESSION[
+                    "csrf_token"
+                ] ?>">
 
                 <button class="justify-end" type="submit">Publish</button>
             </form>
