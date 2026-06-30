@@ -1,68 +1,25 @@
 <?php
 session_start();
 
-// generate new csrf_token if we not have
-if (empty($_SESSION["csrf_token"])) {
-    $_SESSION["csrf_token"] = bin2hex(random_bytes(32));
-}
+require_once "../src/filteres/filter_CSRF_token.php";
+
+require_once "../src/filteres/max_character.php";
+require_once "../src/filteres/valid_image_file.php";
+require_once "../src/filteres/filter_CSRF_token.php";
+
+require_once "../src/save_path_image.php";
 
 require_once "../src/components/input.php";
 require_once "../src/components/textarea.php";
 require_once "../src/components/head.php";
 require_once "../src/db.php";
 
-// check CSRF-token
-function validateCSRFToken()
-{
-    if (
-        !isset($_POST["csrf_token"]) ||
-        !isset($_SESSION["csrf_token"]) ||
-        !hash_equals($_SESSION["csrf_token"], $_POST["csrf_token"])
-    ) {
-        die("CSRF token validation failed");
-    }
-    return true;
-}
+generate_CSRF_token();
 
 function validateData(string $title, array $image)
 {
-    if (
-        !filter_var($title, FILTER_CALLBACK, [
-            "options" => function ($value) {
-                if (strlen($value) > 60) {
-                    return false;
-                } else {
-                    return true;
-                }
-            },
-        ])
-    ) {
-        die("Oversize title!");
-    }
-
-    $finfo = new finfo(FILEINFO_MIME_TYPE);
-    $mimeType = $finfo->file($image["tmp_name"]);
-
-    $allowedTypes = ["image/jpeg", "image/png", "image/gif", "image/webp"];
-
-    if (!in_array($mimeType, $allowedTypes)) {
-        die('Image format is not correct!');
-    }
-}
-
-function saveImage(array $image): string {
-    $uploadDir = "./images/";
-
-    if (!is_dir($uploadDir)) {
-        mkdir($uploadDir, 0755, true);
-    }
-    $fileExtension = pathinfo($image["name"], PATHINFO_EXTENSION);
-
-    $newFilename = bin2hex(random_bytes(8)) . "." . $fileExtension;
-    $destination = $uploadDir . $newFilename;
-
-    move_uploaded_file($image["tmp_name"], $destination);
-    return $destination;
+    filter_max_characters($title, 20);
+    valid_image_file($image);
 }
 
 try {
@@ -71,14 +28,14 @@ try {
 
         $title = $_POST["title"];
         $image = $_FILES["image"];
-        
+
         validateData($title, $image);
 
         $content = $_POST["content"];
         $created_at = "test";
         $user_id = 1;
 
-        $destination = saveImage($image);
+        $destination = save_path_image($image);
 
         $query = 'INSERT INTO posts
         (title, image, content, created_at, user_id) VALUES
@@ -95,7 +52,7 @@ try {
         ]);
     }
 } catch (PDOException $e) {
-    die('Query failed: ' . $e->getMessage());
+    die("Query failed: " . $e->getMessage());
 }
 ?>
 
