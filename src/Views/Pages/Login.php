@@ -1,7 +1,7 @@
 <?php
 // argument (string $type, name $name, string $placeholder)
-require_once '../src/components/input.php';
-require_once '../src/components/head.php';
+require_once '../src/Views/components/input.php';
+require_once '../src/Views/components/head.php';
 
 ?>
 

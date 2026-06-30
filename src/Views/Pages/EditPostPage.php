@@ -1,13 +1,12 @@
 <?php
 
 
-require_once "../src/components/head.php";
+require_once "../src/Views/components/head.php";
 
-require_once "../src/components/input.php";
-require_once "../src/components/textarea.php";
+require_once "../src/Views/components/input.php";
+require_once "../src/Views/components/textarea.php";
 
 require_once "../src/filteres/max_character.php";
-require_once "../src/filteres/valid_image_file.php";
 require_once "../src/filteres/filter_CSRF_token.php";
 
 require_once "../src/save_path_image.php";
@@ -27,9 +26,9 @@ try {
         exit('Post not found');
     }
 
-    (string) ($title = $data["title"]);
-    (string) ($content = $data["content"]);
-    (string) ($image = $data["image"]);
+    (string) $title = $data["title"];
+    (string) $content = $data["content"];
+    (string) $image = $data["image"];
 
     if ($_SERVER["REQUEST_METHOD"] === "POST") {
         validateCSRFToken();
@@ -63,8 +62,8 @@ try {
 <html lang="en">
     <?php head("Edit Post"); ?>
     <body>
-        <?php require "../src/components/nav.php"; ?>
-        <img src="<?= $image ?>" class="h-60 w-lvw object-cover">
+        <?php require "../src/Views/components/nav.php"; ?>
+        <img src="<?= '/' . $image ?>" class="h-60 w-lvw object-cover">
         <main class="flex justify-between px-10 py-5 gap-5">
             <form action="" method="post" enctype="multipart/form-data">
                 <div class="flex-1">

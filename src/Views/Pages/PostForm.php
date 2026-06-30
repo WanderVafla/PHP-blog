@@ -4,14 +4,13 @@ session_start();
 require_once "../src/filteres/filter_CSRF_token.php";
 
 require_once "../src/filteres/max_character.php";
-require_once "../src/filteres/valid_image_file.php";
 require_once "../src/filteres/filter_CSRF_token.php";
 
 require_once "../src/save_path_image.php";
 
-require_once "../src/components/input.php";
-require_once "../src/components/textarea.php";
-require_once "../src/components/head.php";
+require_once "../src/Views/components/input.php";
+require_once "../src/Views/components/textarea.php";
+require_once "../src/Views/components/head.php";
 require_once "../src/db.php";
 
 generate_CSRF_token();
@@ -54,7 +53,7 @@ try {
 <html lang="en">
     <?php head("Create new post"); ?>
     <body>
-        <?php require_once "../src/components/nav.php"; ?>
+        <?php require_once "../src/Views/components/nav.php"; ?>
         <header>
         </header>
         <main class="main-default flex justify-between">
