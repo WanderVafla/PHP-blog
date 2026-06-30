@@ -21,6 +21,11 @@ try {
     $stmt = $pdo->prepare("SELECT * FROM posts WHERE id=:id");
     $stmt->execute(["id" => $id]);
     $data = $stmt->fetch();
+    if (!$data)
+    {
+        http_response_code(404);
+        exit('Post not found');
+    }
 
     (string) ($title = $data["title"]);
     (string) ($content = $data["content"]);
