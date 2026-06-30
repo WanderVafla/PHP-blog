@@ -1,4 +1,6 @@
 <?php
+session_start();
+
 require_once '../src/components/post.php';
 require_once '../src/components/head.php';
 
