@@ -16,12 +16,6 @@ require_once "../src/db.php";
 
 generate_CSRF_token();
 
-function validateData(string $title, array $image)
-{
-    filter_max_characters($title, 20);
-    valid_image_file($image);
-}
-
 try {
     if ($_SERVER["REQUEST_METHOD"] === "POST") {
         validateCSRFToken();
@@ -29,7 +23,7 @@ try {
         $title = $_POST["title"];
         $image = $_FILES["image"];
 
-        validateData($title, $image);
+        filter_max_characters($title, 20);
 
         $content = $_POST["content"];
         $created_at = "test";

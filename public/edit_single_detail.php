@@ -35,9 +35,8 @@ try {
 
         filter_max_characters($title_post, 20);
         if ($image_post['size'] > 0) {
-            valid_image_file($image_post);
-            unlink($image);
             $destination = save_path_image($image_post);
+            unlink($image);
         }
 
         $stmt = $pdo->prepare(
