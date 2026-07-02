@@ -1,5 +1,14 @@
 <?php
-session_start();
+require_once __DIR__ . '/../vendor/autoload.php';
+
+use Wandervafla\PhpBlog\Actions\Actions;
+use Wandervafla\PhpBlog\Controllers\PostController;
+use Wandervafla\PhpBlog\Actions\Security\InitSessionAction;
+
+new InitSessionAction();
+
+$controller = new PostController();
+
 
 $request = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $viewPagesDir = '../src/Views/Pages/';
@@ -7,7 +16,7 @@ $viewPagesDir = '../src/Views/Pages/';
 switch ($request) {
     case '':
     case '/':
-        require $viewPagesDir . 'Home.php';
+        $controller->home();
         break;
     case '/login':
         require $viewPagesDir . 'Login.php';
@@ -16,7 +25,7 @@ switch ($request) {
         require $viewPagesDir . 'SingUp.php';
         break;
     case '/createPost':
-        require $viewPagesDir . 'PostForm.php';
+        $controller->create();
         break;
     case '/post':
         require $viewPagesDir . 'PostPage.php';
