@@ -1,52 +1,7 @@
 <?php
-session_start();
-
-require_once "../src/filteres/filter_CSRF_token.php";
-
-require_once "../src/filteres/max_character.php";
-require_once "../src/filteres/filter_CSRF_token.php";
-
-require_once "../src/save_path_image.php";
-
 require_once "../src/Views/components/input.php";
 require_once "../src/Views/components/textarea.php";
 require_once "../src/Views/components/head.php";
-require_once "../src/db.php";
-
-generate_CSRF_token();
-
-try {
-    if ($_SERVER["REQUEST_METHOD"] === "POST") {
-        validateCSRFToken();
-
-        $title = $_POST["title"];
-        $image = $_FILES["image"];
-
-        filter_max_characters($title, 20);
-
-        $content = $_POST["content"];
-        $created_at = "test";
-        $user_id = 1;
-
-        $destination = save_path_image($image);
-
-        $query = 'INSERT INTO posts
-        (title, image, content, created_at, user_id) VALUES
-        (:title, :image, :content, :created_at, :user_id)';
-
-        $stmt = $pdo->prepare($query);
-
-        $stmt->execute([
-            ":title" => $title,
-            ":image" => $destination,
-            ":content" => $content,
-            ":created_at" => $created_at,
-            ":user_id" => $user_id,
-        ]);
-    }
-} catch (PDOException $e) {
-    die("Query failed: " . $e->getMessage());
-}
 ?>
 
 <!doctype html>
@@ -74,7 +29,7 @@ try {
                     name: "image",
                     placeholder: "Image",
                 ); ?>
-                <input type="hidden" name="csrf_token" value="<?php echo $_SESSION[
+                <input type="hidden" name="csrf_token" value="<?php $_SESSION[
                     "csrf_token"
                 ]; ?>">
 
