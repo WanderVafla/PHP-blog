@@ -31,7 +31,7 @@ switch ($request) {
         require $viewPagesDir . 'PostPage.php';
         break;
     case '/post/edit':
-        require $viewPagesDir . 'EditPostPage.php';
+        $controller->edit();
         break;
 }
 
