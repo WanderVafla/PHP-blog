@@ -1,6 +1,6 @@
 <?php
 
-require_once '../src/components/head.php';
+require_once '../src/Views/components/head.php';
 
 ?>
 
@@ -8,7 +8,7 @@ require_once '../src/components/head.php';
 <html lang="en">
     <?php head('Post page') ?>
     <body>
-        <?php require '../src/components/nav.php'; ?>
+        <?php require '../src/Views/components/nav.php'; ?>
             <!--Image of Post (DIV is test)-->
             <div class="bg-gray-500 h-70 shadow-xl"></div>
         <main class="flex justify-between px-10 py-5 gap-5">

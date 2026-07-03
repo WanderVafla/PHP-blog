@@ -1,7 +1,7 @@
 <?php
 // argument (string $type, name $name, string $placeholder)
-require_once '../src/components/input.php';
-require_once '../src/components/head.php';
+require_once '../src/Views/components/input.php';
+require_once '../src/Views/components/head.php';
 
 ?>
 <!doctype html>
@@ -46,7 +46,7 @@ require_once '../src/components/head.php';
                 <button type="submit">Sing in</button>
             </form>
             <p>
-                Have account? <a href="login.php" class="link_text">Log in</a> - Back to <a href="index.php" class="link_text">Home Page</a>
+                Have account? <a href="/login" class="link_text">Log in</a> - Back to <a href="/" class="link_text">Home Page</a>
             </p>
         </main>
     </body>

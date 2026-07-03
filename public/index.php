@@ -1,40 +1,34 @@
 <?php
-session_start();
+require_once __DIR__ . '/../vendor/autoload.php';
 
-require_once '../src/components/post.php';
-require_once '../src/components/head.php';
+use Wandervafla\PhpBlog\Actions\Actions;
+use Wandervafla\PhpBlog\Controllers\PostController;
+use Wandervafla\PhpBlog\Actions\Security\InitSessionAction;
 
-require_once "../src/db.php";
+new InitSessionAction();
 
-try {
-    $posts = $pdo->query('SELECT * FROM posts');
-} catch (PDOException $e) {
-    die('Query failed: ' . $e->getMessage());
+$controller = new PostController();
+
+$request = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+$viewPagesDir = '../src/Views/Pages/';
+
+switch ($request) {
+    case '':
+    case '/':
+        $controller->home();
+        break;
+    case '/login':
+        require $viewPagesDir . 'Login.php';
+        break;
+    case '/singUp':
+        require $viewPagesDir . 'SingUp.php';
+        break;
+    case '/createPost':
+        $controller->upster();
+        break;
+    case '/post':
+        require $viewPagesDir . 'PostPage.php';
+        break;
 }
 
 ?>
-
-<!doctype html>
-<html lang="en">
-    <?php head('PHP blog') ?>
-    <body>
-        <?php require '../src/components/nav.php'; ?>
-        <main class="main-default">
-        <div class="flex flex-col gap-5 items-end">
-
-            <span class="px-5">
-                <button><a href="post_creation.php">New Post</a></button>
-            </span>
-
-            <div class="grid grid-cols-4 gap-5">
-
-                <?php foreach ($posts as $post): ?>
-                    <?php post(content: $post['content'], title: $post['title'], path: $post['image']); ?>
-                <?php endforeach; ?>
-
-            </div>
-        </div>
-
-        </main>
-    </body>
-</html>
