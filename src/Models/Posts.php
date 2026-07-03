@@ -20,7 +20,7 @@ class Posts
             ->query("SELECT * FROM posts")
             ->fetchAll(PDO::FETCH_ASSOC);
     }
-    public function fetchOne(int $id): array | null
+    public function fetchOne(int $id): array|null
     {
         try {
             $stmt = $this->pdo->prepare("SELECT * FROM posts WHERE id=:id");
@@ -34,45 +34,37 @@ class Posts
             die("Query failed: " . $e->getMessage());
         }
     }
-    public function insertPost(
+    public function upsert(
+        int|null $id,
         string $title,
         string $imagePath,
         string $content,
         string $created_at,
         int $user_id,
     ) {
-        $query = 'INSERT INTO posts
-        (title, image, content, created_at, user_id) VALUES
-        (:title, :image, :content, :created_at, :user_id)';
-
-        $stmt = $this->pdo->prepare($query);
-
-        $stmt->execute([
-            ":title" => $title,
-            ":image" => $imagePath,
-            ":content" => $content,
-            ":created_at" => $created_at,
-            ":user_id" => $user_id,
-        ]);
-    }
-    public function update(
-        int $id,
-        string $title,
-        string $imagePath,
-        string $content,
-    ) {
         try {
             $stmt = $this->pdo->prepare(
-                "UPDATE posts SET title = :title, content = :content, image = :image WHERE id = :id",
+            'INSERT INTO posts
+            (id, title, image, content, created_at, user_id) 
+            VALUES 
+            (:id, :title, :image, :content, :created_at, :user_id)
+            
+            ON CONFLICT(id)
+            DO UPDATE SET
+                title = EXCLUDED.title,
+                content = EXCLUDED.content,
+                image = EXCLUDED.image',
             );
             $stmt->execute([
-                "id" => $id,
-                "title" => $title,
-                "content" => $content,
-                "image" => $imagePath,
+                ":id" => $id,
+                ":title" => $title,
+                ":image" => $imagePath,
+                ":content" => $content,
+                ":created_at" => $created_at,
+                ":user_id" => $user_id,
             ]);
         } catch (PDOException $e) {
-            die("Query failed: " . $e->getMessage());
+            throw new PDOException($e->getMessage());
         }
     }
 }
