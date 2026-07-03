@@ -5,6 +5,7 @@ use Wandervafla\PhpBlog\Actions\Security\ValidateCsrfAction;
 use Wandervafla\PhpBlog\Models\Posts;
 use Wandervafla\PhpBlog\Actions\UploadImageAction;
 use Wandervafla\PhpBlog\Filteres\MaxStrlenFilter;
+use Wandervafla\PhpBlog\Filteres\XssFilter;
 
 use Exception;
 
@@ -19,16 +20,20 @@ class PostController
     }
     public function create()
     {
+        $title = $content = "";
         if ($_SERVER["REQUEST_METHOD"] === "POST") {
             new ValidateCsrfAction();
-            
-            $title = $_POST["title"];
-            $image = $_FILES["image"];
 
+            $xssFilter = new XssFilter();
 
-            $content = $_POST["content"];
-            $created_at = "test";
-            $user_id = 1;
+            (string) ($title = $xssFilter($_POST["title"]));
+            (array) ($image = $_FILES["image"]);
+
+            new MaxStrlenFilter($title, 20);
+
+            (string) ($content = $xssFilter($_POST["content"]));
+            (string) ($created_at = "test");
+            (int) ($user_id = 1);
 
             $destination = new UploadImageAction()($image);
 
@@ -45,6 +50,8 @@ class PostController
     public function edit()
     {
         $postModel = new Posts();
+        $xssFilter = new XssFilter();
+        
         (int) ($id = $_GET["id"]);
         // get old datas form db for display it on page
 
@@ -63,8 +70,8 @@ class PostController
         if ($_SERVER["REQUEST_METHOD"] === "POST") {
             new ValidateCsrfAction();
 
-            $title_post = $_POST["title"];
-            $content_post = $_POST["content"];
+            $title_post = $xssFilter($_POST["title"]);
+            $content_post = $xssFilter($_POST["content"]);
             $image_post = $_FILES["image"];
 
             new MaxStrlenFilter($title_post, 20);
