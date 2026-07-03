@@ -23,7 +23,7 @@ require_once '../src/Views/components/head.php';
                 <button type="submit">Sing in</button>
             </form>
             <p>
-                No account? <a href="register_page.php" class="link_text">Create one</a> - Back to <a href="index.php" class="link_text">Home Page</a>
+                No account? <a href="/singUp" class="link_text">Create one</a> - Back to <a href="/" class="link_text">Home Page</a>
             </p>
         </main>
     </body>
