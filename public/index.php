@@ -9,7 +9,6 @@ new InitSessionAction();
 
 $controller = new PostController();
 
-
 $request = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $viewPagesDir = '../src/Views/Pages/';
 
@@ -25,13 +24,10 @@ switch ($request) {
         require $viewPagesDir . 'SingUp.php';
         break;
     case '/createPost':
-        $controller->create();
+        $controller->upster();
         break;
     case '/post':
         require $viewPagesDir . 'PostPage.php';
-        break;
-    case '/post/edit':
-        $controller->edit();
         break;
 }
 
