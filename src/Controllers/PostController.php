@@ -73,9 +73,14 @@ class PostController
             if (!new MaxStrlenFilter()($title, 20)) {
                 die("Oversize title!");
             }
-            if ($image_post["size"] > 0) {
-                $destination = (new UploadImageAction())($image_post);
-                unlink($image);
+            if (
+                isset($image_post["error"]) &&
+                $image_post["error"] === UPLOAD_ERR_OK
+            ) {
+                $destination = new UploadImageAction()($image_post);
+                if (!empty($image) && file_exists($image)) {
+                    unlink($image);
+                }
             }
             $postModel->update(
                 id: $id,
