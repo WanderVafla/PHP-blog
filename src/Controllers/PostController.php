@@ -25,9 +25,6 @@ class PostController
             $title = $_POST["title"];
             $image = $_FILES["image"];
 
-            if (!new MaxStrlenFilter()($title, 20)) {
-                die("Oversize title!");
-            }
 
             $content = $_POST["content"];
             $created_at = "test";
@@ -70,9 +67,7 @@ class PostController
             $content_post = $_POST["content"];
             $image_post = $_FILES["image"];
 
-            if (!new MaxStrlenFilter()($title, 20)) {
-                die("Oversize title!");
-            }
+            new MaxStrlenFilter($title_post, 20);
             if (
                 isset($image_post["error"]) &&
                 $image_post["error"] === UPLOAD_ERR_OK
