@@ -5,7 +5,7 @@ use Exception;
 
 class MaxStrlenFilter
 {
-    public function __construct(string $value, int $max_characters)
+    public function __invoke(string $value, int $max_characters)
     {
         if (!filter_var($value, FILTER_CALLBACK, [
                 "options" => function () use ($value, $max_characters) {
@@ -17,8 +17,9 @@ class MaxStrlenFilter
                 },
             ])
         ) {
-            throw new Exception('Oversize title!');
+            return false;
         }
+        return true;
     }
 
 }

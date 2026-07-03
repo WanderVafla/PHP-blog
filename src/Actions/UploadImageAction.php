@@ -3,6 +3,7 @@ namespace Wandervafla\PhpBlog\Actions;
 
 use Exception;
 use finfo;
+use StreamBucket;
 
 class UploadImageAction
 {
@@ -11,12 +12,10 @@ class UploadImageAction
     
     public function __invoke(array $image): string
     {
-    
         $finfo = new finfo(FILEINFO_MIME_TYPE);
         $mimeType = $finfo->file($image["tmp_name"]);
     
         if (!in_array($mimeType, self::$allowedTypes)) {
-            http_response_code(406);
             throw new Exception("Image format is not correct!");
         }
         
@@ -34,7 +33,6 @@ class UploadImageAction
         {
             return $destination;
         }
-        http_response_code(500);
         throw new Exception("Image is not saved!");
     }
 }
