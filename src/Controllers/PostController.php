@@ -18,79 +18,84 @@ class PostController
         $posts = new Posts()->fetchAll();
         require self::$viewPageDir . "Home.php";
     }
-    public function create()
-    {
-        $title = $content = "";
-        if ($_SERVER["REQUEST_METHOD"] === "POST") {
-            new ValidateCsrfAction();
-
-            $xssFilter = new XssFilter();
-
-            (string) ($title = $xssFilter($_POST["title"]));
-            (array) ($image = $_FILES["image"]);
-
-            new MaxStrlenFilter($title, 20);
-
-            (string) ($content = $xssFilter($_POST["content"]));
-            (string) ($created_at = "test");
-            (int) ($user_id = 1);
-
-            $destination = new UploadImageAction()($image);
-
-            new Posts()->insertPost(
-                title: $title,
-                imagePath: $destination,
-                content: $content,
-                created_at: $created_at,
-                user_id: $user_id,
-            );
-        }
-        require self::$viewPageDir . "PostForm.php";
-    }
-    public function edit()
+    public function upster()
     {
         $postModel = new Posts();
         $xssFilter = new XssFilter();
-        
-        (int) ($id = $_GET["id"]);
-        // get old datas form db for display it on page
 
-        $data = $postModel->fetchOne($id);
-        if (!$data) {
-            http_response_code(404);
-            exit("Post not found");
-        }
-        (string) ($title = $data["title"]);
-        (string) ($content = $data["content"]);
-        (string) ($image = $data["image"]);
+        $errors = [];
 
-        if (!file_exists($image) || !$image) {
-            $image = "asset/notImage.png";
+        // HARDCODED for test
+        (string) ($created_at = "test");
+        (string) ($user_id = 1);
+
+        (int) ($id = $_GET["id"] ?? null);
+
+        if (isset($id)) {
+            $data = $postModel->fetchOne($id);
+            if (!$data) {
+                http_response_code(404);
+                exit("Post not found");
+            }
+            $title = $content = $image = "";
+
+            (string) ($title = $data["title"]);
+            (string) ($content = $data["content"]);
+            (string) ($image_path = $data["image"]);
         }
+
         if ($_SERVER["REQUEST_METHOD"] === "POST") {
             new ValidateCsrfAction();
+            // Just invoke Object for use her after
+            $titleStrlenFilter = new MaxStrlenFilter();
+            $uploadImageAction = new UploadImageAction();
 
-            $title_post = $xssFilter($_POST["title"]);
-            $content_post = $xssFilter($_POST["content"]);
-            $image_post = $_FILES["image"];
+            $new_title = $xssFilter($_POST["title"]);
 
-            new MaxStrlenFilter($title_post, 20);
-            if (
-                isset($image_post["error"]) &&
-                $image_post["error"] === UPLOAD_ERR_OK
-            ) {
-                $destination = new UploadImageAction()($image_post);
-                if (!empty($image) && file_exists($image)) {
-                    unlink($image);
-                }
+            if (empty($new_title)) {
+                $errors["title"] = "Title is reuquired";
+            } elseif (!$titleStrlenFilter($new_title, 20)) {
+                $errors["title"] = "Title should be less that 20 characters";
             }
-            $postModel->update(
-                id: $id,
-                title: $title_post ?? $title,
-                imagePath: $destination ?? $image,
-                content: $content_post ?? $content,
-            );
+
+            $new_content = $xssFilter($_POST["content"]);
+            if (empty($new_content)) {
+                $errors["content"] = "Title is reuquired";
+            }
+
+            $new_image = $_FILES["image"];
+
+            try {
+                if (
+                    isset($new_image["error"]) &&
+                    $new_image["error"] === UPLOAD_ERR_OK
+                ) {
+                    $destination = $uploadImageAction($new_image);
+                    if (!empty($image) && file_exists($image)) {
+                        unlink($image);
+                    }
+                } else {
+                    $destination = $image_path ?? "";
+                }
+            } catch (Exception $e) {
+                $errors["image"] = $e->getMessage();
+            }
+
+            if (empty($errors)) {
+                $postModel->upsert(
+                    id: $id,
+                    title: $new_title,
+                    imagePath: $destination,
+                    content: $new_content,
+                    created_at: $created_at,
+                    user_id: $user_id,
+                );
+            }
         }
-        require self::$viewPageDir . "EditPostPage.php";
+        if (isset($id)) {
+            require self::$viewPageDir . "EditPostPage.php";
+        } else {
+            require self::$viewPageDir . "PostForm.php";
+        }
     }
 }
