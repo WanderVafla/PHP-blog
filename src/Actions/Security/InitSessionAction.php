@@ -3,7 +3,7 @@ namespace Wandervafla\PhpBlog\Actions\Security;
 
 class InitSessionAction
 {
-    public function __invoke()
+    public function __construct()
     {
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
