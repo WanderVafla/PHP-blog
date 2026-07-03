@@ -29,9 +29,7 @@ require_once "../src/Views/components/head.php";
                     name: "image",
                     placeholder: "Image",
                 ); ?>
-                <input type="hidden" name="csrf_token" value="<?php $_SESSION[
-                    "csrf_token"
-                ]; ?>">
+                <input type="hidden" name="csrf_token" value="<?= $_SESSION["csrf_token"] ?>">
 
                 <button class="justify-end" type="submit">Publish</button>
             </form>
