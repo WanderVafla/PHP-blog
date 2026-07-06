@@ -55,11 +55,15 @@ class UserController
             }
 
             try {
-                $users->insert(
-                    name: $name,
-                    email: $email,
-                    password: password_hash($password, PASSWORD_BCRYPT),
-                );
+                if (empty($errors)) {
+                    $users->insert(
+                        name: $name,
+                        email: $email,
+                        password: password_hash($password, PASSWORD_BCRYPT),
+                    );
+                    header("Location: /login");
+                    exit();
+                }
             } catch (PDOException $e) {
                 $errorMessage = $e->getMessage();
                 if (str_contains($errorMessage, "users.name")) {
