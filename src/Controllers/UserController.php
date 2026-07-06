@@ -108,8 +108,10 @@ class UserController
                             $_SESSION["user_id"] = $userData["id"];
                             $_SESSION["username"] = $userData["name"];
                         } else {
-                            $errors['form'] = MESSAGE_LOGIN_FAILED;
+                            $errors["form"] = MESSAGE_LOGIN_FAILED;
                         }
+                    } else {
+                        $errors["form"] = MESSAGE_LOGIN_FAILED;
                     }
                 }
             } catch (PDOException $e) {

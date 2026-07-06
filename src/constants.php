@@ -12,3 +12,6 @@ define('MESSAGE_USERNAME_VALIDATE', 'Username should be one word');
 define('MESSAGE_EMAIL_VALIDATE', 'Email is not valide');
 define('MESSAGE_PASSWORD_VALIDATE_COMPLEXITY', 'Password mush have 1 uppercase, 1 lowercase, 1 data and 1 symbol');
 define('MESSAGE_CONFITM_PASSWORD_VALIDATE', 'Password does not match');
+
+
+define('MESSAGE_LOGIN_FAILED', 'Invalid email or password');
