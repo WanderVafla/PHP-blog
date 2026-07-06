@@ -10,7 +10,12 @@ use Wandervafla\PhpBlog\Models\Users;
 class UserController
 {
     private static $viewPageDir = __DIR__ . "/../Views/Pages/";
+    private Users $users;
 
+    public function __construct()
+    {
+        $this->users = new Users();
+    }
     public function create()
     {
         $errors = [];
@@ -56,7 +61,7 @@ class UserController
 
             try {
                 if (empty($errors)) {
-                    $users->insert(
+                    $this->users->insert(
                         name: $name,
                         email: $email,
                         password: password_hash($password, PASSWORD_BCRYPT),
