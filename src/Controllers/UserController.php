@@ -86,7 +86,7 @@ class UserController
         $errors = [];
         if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $email = $_POST["email"];
-            $password = $_POST["password"];
+            $password = trim($_POST["password"]);
 
             // empty strings errors message;
             if (empty($email)) {
@@ -98,6 +98,21 @@ class UserController
             // not valided datas
             if (!empty($email) && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
                 $errors["email"] = MESSAGE_EMAIL_VALIDATE;
+            }
+
+            try {
+                if (empty($errors)) {
+                    $userData = $this->users->select(email: $email);
+                    if ($userData) {
+                        if (password_verify($password, $userData["password"])) {
+                            echo "password valid";
+                        } else {
+                            $errors['form'] = MESSAGE_LOGIN_FAILED;
+                        }
+                    }
+                }
+            } catch (PDOException $e) {
+                echo $e->getMessage();
             }
         }
         require self::$viewPageDir . "Login.php";
