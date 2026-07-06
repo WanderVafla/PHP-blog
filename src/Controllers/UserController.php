@@ -15,7 +15,7 @@ class UserController
         if ($_SERVER["REQUEST_METHOD"] === "POST") {
             new ValidateCsrfAction();
 
-            $name = $_POST["name"];
+            $name = $_POST["username"];
             $email = $_POST["email"];
             $password = $_POST["password"];
 
