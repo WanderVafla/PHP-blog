@@ -27,7 +27,7 @@ switch ($request) {
         $controller->upster();
         break;
     case '/post':
-        require $viewPagesDir . 'PostPage.php';
+        $controller->open();
         break;
 }
 

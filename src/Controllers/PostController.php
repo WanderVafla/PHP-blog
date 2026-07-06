@@ -98,4 +98,18 @@ class PostController
             require self::$viewPageDir . "PostForm.php";
         }
     }
+    public function open()
+    {
+        (int) ($id = $_GET["id"]);
+        $data = new Posts()->fetchOne(id: $id);
+
+        $title = $data["title"];
+        $content = $data["content"];
+        $image_path = $data["image"];
+        if (!file_exists($image_path)) {
+            $image_path = "/asset/notImage.png";
+        }
+
+        require self::$viewPageDir . "PostPage.php";
+    }
 }
