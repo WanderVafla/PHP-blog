@@ -23,9 +23,9 @@ class Users
                 '
             );
             $stmt->execute([
-            "name" => $name,
-            "email" => $email,
-            "password" => $password,
+                "name" => $name,
+                "email" => $email,
+                "password" => $password,
             ]);
         } catch (PDOException $e) {
             throw new PDOException($e->getMessage());
