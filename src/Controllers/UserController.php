@@ -76,4 +76,25 @@ class UserController
         }
         require self::$viewPageDir . "SingUp.php";
     }
+    public function login()
+    {
+        $errors = [];
+        if ($_SERVER["REQUEST_METHOD"] === "POST") {
+            $email = $_POST["email"];
+            $password = $_POST["password"];
+
+            // empty strings errors message;
+            if (empty($email)) {
+                $errors["email"] = MESSAGE_EMAIL_REQUIRE;
+            }
+            if (empty($password)) {
+                $errors["password"] = MESSAGE_PASSWORD_REQUIRE;
+            }
+            // not valided datas
+            if (!empty($email) && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                $errors["email"] = MESSAGE_EMAIL_VALIDATE;
+            }
+        }
+        require self::$viewPageDir . "Login.php";
+    }
 }

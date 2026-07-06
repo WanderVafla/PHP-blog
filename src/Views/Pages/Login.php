@@ -1,24 +1,31 @@
 <?php
 // argument (string $type, name $name, string $placeholder)
-require_once '../src/Views/components/input.php';
-require_once '../src/Views/components/head.php';
-
+require_once "../src/Views/components/input.php";
+require_once "../src/Views/components/head.php";
 ?>
 
 <!doctype html>
 <html lang="en">
-    <?php head('Login') ?>
+    <?php head("Login"); ?>
     <body class="flex flex-col justify-center items-center w-lvw h-lvh gap-10">
         <h1>Sign in to your account</h1>
         <main class="main-form">
-            <form class="flex flex-col w-110 gap-5">
+            <form method="POST" class="flex flex-col w-110 gap-5">
                 <label for="sing-in-email">Email address</label>
-                <?php input_with_border(type: 'text', placeholder: 'email'); ?>
-                <!--<input id="sing-in-email" type="email" name="email" />-->
-                
+                <span class="error"><?= $errors['email'] ?></span>
+                <?php input_with_border(
+                    type: "email",
+                    name: "email",
+                    placeholder: "email",
+                ); ?>
+
                 <label for="sing-in-password">Password</label>
-                <?php input_with_border(type: 'text', placeholder: 'Password'); ?>
-                <!--<input id="sing-in-password" type="password" name="password" />-->
+                <span class="error"><?= $errors['password'] ?></span>
+                <?php input_with_border(
+                    type: "password",
+                    name: "password",
+                    placeholder: "Password",
+                ); ?>
 
                 <button type="submit">Sing in</button>
             </form>
