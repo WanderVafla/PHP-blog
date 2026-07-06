@@ -19,7 +19,7 @@
             <div class="grid grid-cols-4 gap-5">
 
                 <?php foreach ($posts as $post): ?>
-                    <?php post(content: $post['content'], title: $post['title'], path: $post['image']); ?>
+                    <?php post(id: $post['id'], content: $post['content'], title: $post['title'], path: $post['image']); ?>
                 <?php endforeach; ?>
 
                 
