@@ -4,10 +4,12 @@ require_once __DIR__ . '/../vendor/autoload.php';
 use Wandervafla\PhpBlog\Actions\Actions;
 use Wandervafla\PhpBlog\Controllers\PostController;
 use Wandervafla\PhpBlog\Actions\Security\InitSessionAction;
+use Wandervafla\PhpBlog\Controllers\UserController;
 
 new InitSessionAction();
 
 $controller = new PostController();
+$controllerUsers = new UserController();
 
 $request = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $viewPagesDir = '../src/Views/Pages/';
@@ -21,7 +23,7 @@ switch ($request) {
         require $viewPagesDir . 'Login.php';
         break;
     case '/singUp':
-        require $viewPagesDir . 'SingUp.php';
+        $controllerUsers->create();
         break;
     case '/createPost':
         $controller->upster();
