@@ -3,21 +3,56 @@ namespace Wandervafla\PhpBlog\Controllers;
 
 use PDOException;
 use Wandervafla\PhpBlog\Actions\Security\ValidateCsrfAction;
+use Wandervafla\PhpBlog\Filteres\PasswordComplexityFilter;
+use Wandervafla\PhpBlog\Filteres\XssFilter;
 use Wandervafla\PhpBlog\Models\Users;
 
 class UserController
 {
     private static $viewPageDir = __DIR__ . "/../Views/Pages/";
-    
+
     public function create()
     {
+        $errors = [];
+
         $users = new Users();
+        $xssFilter = new XssFilter();
+        $passwordValidate = new PasswordComplexityFilter();
+
         if ($_SERVER["REQUEST_METHOD"] === "POST") {
             new ValidateCsrfAction();
 
-            $name = $_POST["username"];
-            $email = $_POST["email"];
-            $password = $_POST["password"];
+            $name = $xssFilter($_POST["username"]);
+            $email = $xssFilter($_POST["email"]);
+            $password = trim($_POST["password"]);
+            $confirmPassword = trim($_POST["confirm-password"]);
+
+            if (empty($name)) {
+                $errors["username"] = MESSAGE_USERNAME_REQUIRE;
+            }
+            if (empty($email)) {
+                $errors["email"] = MESSAGE_EMAIL_REQUIRE;
+            }
+            if (empty($password)) {
+                $errors["password"] = MESSAGE_PASSWORD_REQUIRE;
+            }
+            if (empty($password)) {
+                $errors["confirm-password"] = MESSAGE_CONFITM_PASSWORD_REQUIRE;
+            }
+
+            if (str_word_count($name) > 1) {
+                $errors["username"] = MESSAGE_USERNAME_VALIDATE;
+            }
+            if (!filter_var($email, FILTER_VALIDATE_EMAIL) && !empty($email)) {
+                $errors["email"] = MESSAGE_EMAIL_VALIDATE;
+            }
+            if (!$passwordValidate($password) && !empty($password)) {
+                $errors["password"] = MESSAGE_PASSWORD_VALIDATE_COMPLEXITY;
+            }
+
+            if ($password !== $confirmPassword && !empty($confirmPassword)) {
+                $errors["confirm-password"] = MESSAGE_CONFITM_PASSWORD_VALIDATE;
+            }
 
             try {
                 $users->insert(
@@ -26,9 +61,15 @@ class UserController
                     password: password_hash($password, PASSWORD_BCRYPT),
                 );
             } catch (PDOException $e) {
-                die($e->getMessage());
+                $errorMessage = $e->getMessage();
+                if (str_contains($errorMessage, "users.name")) {
+                    $errors["username"] = MESSAGE_USERNAME_EXIST;
+                }
+                if (str_contains($errorMessage, "users.email")) {
+                    $errors["email"] = MESSAGE_EMAIL_EXIST;
+                }
             }
         }
-        require self::$viewPageDir . 'SingUp.php';
+        require self::$viewPageDir . "SingUp.php";
     }
 }
