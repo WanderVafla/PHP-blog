@@ -23,7 +23,7 @@ require_once "../src/Views/components/head.php";
                 <label for="sing-in-password">Password</label>
                 <span class="error"><?= $errors['password'] ?></span>
                 <?php input_with_border(
-                    type: "text",
+                    type: "password",
                     name: "password",
                     placeholder: "Password",
                 ); ?>
