@@ -105,7 +105,8 @@ class UserController
                     $userData = $this->users->select(email: $email);
                     if ($userData) {
                         if (password_verify($password, $userData["password"])) {
-                            echo "password valid";
+                            $_SESSION["user_id"] = $userData["id"];
+                            $_SESSION["username"] = $userData["name"];
                         } else {
                             $errors['form'] = MESSAGE_LOGIN_FAILED;
                         }
