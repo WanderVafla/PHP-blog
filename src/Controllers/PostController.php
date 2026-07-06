@@ -102,7 +102,11 @@ class PostController
     {
         (int) ($id = $_GET["id"]);
         $data = new Posts()->fetchOne(id: $id);
-
+        if (!isset($data)){
+            http_response_code(404);
+            die("Post is not exit");
+        }
+        
         $title = $data["title"];
         $content = $data["content"];
         $image_path = $data["image"];
