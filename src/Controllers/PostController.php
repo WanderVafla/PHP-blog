@@ -115,6 +115,7 @@ class PostController
             http_response_code(404);
             die("Post is not exit");
         }
+        (bool) $isCreatedByCurrentUser = Session::isByCurrentUser($data['user_id']);
 
         $title = $data["title"];
         $content = $data["content"];
