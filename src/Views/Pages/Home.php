@@ -27,9 +27,9 @@ $login_status = Session::isLoggedIn();
                 <?php foreach ($posts as $post): ?>
                     <?php post(
                         id: $post["id"],
-                        content: $post["content"],
-                        title: $post["title"],
-                        path: $post["image"],
+                        content: htmlspecialchars($post["content"] ?? ""),
+                        title: htmlspecialchars($post["title"] ?? ""),
+                        path: htmlspecialchars($post["image"] ?? ""),
                     ); ?>
                 <?php endforeach; ?>
 

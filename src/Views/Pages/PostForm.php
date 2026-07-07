@@ -21,15 +21,15 @@ $errorMessage = new MessageErrorAction();
                 <mark>New Post</mark>
             </h1>
             <form action="" method="post" enctype="multipart/form-data" class="flex flex-col gap-5 items-end">
-                <span class="errors"><?= $errorMessage($errors, "title") ?></span>
+                <span class="errors"><?= htmlspecialchars($errors["title"]) ?></span>
                 <?php input_with_border(
                     type: "text",
                     name: "title",
                     placeholder: "Title",
                 ); ?>
-                <span class="error">* <?= $errorMessage($errors, "content") ?></span>
+                <span class="error">* <?= htmlspecialchars($errors["content"]) ?></span>
                 <?php textarea(name: "content", placeholder: "Description"); ?>
-                <span class="error">* <?= $errorMessage($errors, "image") ?></span>
+                <span class="error">* <?= htmlspecialchars($errors["image"]) ?></span>
                 <?php input_with_border(
                     type: "file",
                     name: "image",

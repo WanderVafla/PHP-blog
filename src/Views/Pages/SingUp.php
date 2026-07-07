@@ -1,6 +1,4 @@
 <?php
-// argument (string $type, name $name, string $placeholder)
- 
 use Wandervafla\PhpBlog\Actions\MessageErrorAction;
 
 require_once "../src/Views/components/input.php";
@@ -16,7 +14,7 @@ $errorMessage = new MessageErrorAction();
         <main class="main-form">
             <form method="POST" class="flex flex-col w-110 gap-5">
                 <label for="username-register">Usename</label>
-                <span class='error'><?= $errorMessage($errors, "username") ?></span>
+                <span class='error'><?= htmlspecialchars($errors["username"] ?? "") ?></span>
                 <?php input_with_border(
                     type: "text",
                     id: "username-register",
@@ -25,7 +23,7 @@ $errorMessage = new MessageErrorAction();
                 ); ?>
 
                 <label for="email-register">Email address</label>
-                <span class='error'><?= $errorMessage($errors, "email") ?></span>
+                <span class='error'><?= htmlspecialchars($errors["email"] ?? "") ?></span>
                 <?php input_with_border(
                     type: "text",
                     id: "email-register",
@@ -34,7 +32,7 @@ $errorMessage = new MessageErrorAction();
                 ); ?>
 
                 <label for="sing-in-password">Password</label>
-                <span class='error'><?= $errorMessage($errors, "password") ?></span>
+                <span class='error'><?= htmlspecialchars($errors["password"]) ?></span>
                 <?php input_with_border(
                     type: "password",
                     id: "password-register",
@@ -43,7 +41,7 @@ $errorMessage = new MessageErrorAction();
                 ); ?>
 
                 <label for="confirm-password-register">Confirm Password</label>
-                <span class='error'><?= $errorMessage($errors, "confirm-password") ?></span>
+                <span class='error'><?= htmlspecialchars($errors["confirm-password"]) ?></span>
                 <?php input_with_border(
                     type: "password",
                     id: "confirm-password-register",
