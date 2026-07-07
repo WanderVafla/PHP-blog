@@ -89,7 +89,7 @@ class PostController
             }
 
             if (empty($errors)) {
-                $postModel->upsert(
+                $insertedId = $postModel->upsert(
                     id: $id,
                     title: $new_title,
                     imagePath: $destination,
@@ -97,7 +97,7 @@ class PostController
                     created_at: $created_at,
                     user_id: $user_id,
                 );
-                header("Location: /");
+                header("Location: /post?id=$insertedId");
                 exit();
             }
         }
