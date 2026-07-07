@@ -22,9 +22,9 @@ switch ($request) {
         $controller->home();
         break;
     case '/login':
-        require $viewPagesDir . 'Login.php';
+        $controllerUsers->login();
         break;
-    case '/singUp':
+    case '/singup':
         $controllerUsers->create();
         break;
     case '/createPost':

@@ -1,7 +1,12 @@
 <?php
 // argument (string $type, name $name, string $placeholder)
+ 
+use Wandervafla\PhpBlog\Actions\MessageErrorAction;
+
 require_once "../src/Views/components/input.php";
 require_once "../src/Views/components/head.php";
+
+$errorMessage = new MessageErrorAction();
 ?>
 <!doctype html>
 <html lang="en">
@@ -11,7 +16,7 @@ require_once "../src/Views/components/head.php";
         <main class="main-form">
             <form method="POST" class="flex flex-col w-110 gap-5">
                 <label for="username-register">Usename</label>
-                <span class='error'><?= $errors["username"] ?></span>
+                <span class='error'><?= $errorMessage($errors, "username") ?></span>
                 <?php input_with_border(
                     type: "text",
                     id: "username-register",
@@ -20,7 +25,7 @@ require_once "../src/Views/components/head.php";
                 ); ?>
 
                 <label for="email-register">Email address</label>
-                <span class='error'><?= $errors["email"] ?></span>
+                <span class='error'><?= $errorMessage($errors, "email") ?></span>
                 <?php input_with_border(
                     type: "text",
                     id: "email-register",
@@ -29,7 +34,7 @@ require_once "../src/Views/components/head.php";
                 ); ?>
 
                 <label for="sing-in-password">Password</label>
-                <span class='error'><?= $errors["password"] ?></span>
+                <span class='error'><?= $errorMessage($errors, "password") ?></span>
                 <?php input_with_border(
                     type: "password",
                     id: "password-register",
@@ -38,7 +43,7 @@ require_once "../src/Views/components/head.php";
                 ); ?>
 
                 <label for="confirm-password-register">Confirm Password</label>
-                <span class='error'><?= $errors["confirm-password"] ?></span>
+                <span class='error'><?= $errorMessage($errors, "confirm-password") ?></span>
                 <?php input_with_border(
                     type: "password",
                     id: "confirm-password-register",

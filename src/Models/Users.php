@@ -15,20 +15,29 @@ class Users
     }
     public function insert(string $name, string $email, string $password)
     {
-        try {
-            $stmt = $this->pdo->prepare(
-                '
+        $stmt = $this->pdo->prepare(
+            '
                 INSERT INTO users (name, email, password)
                 VALUES (:name, :email, :password)
-                '
-            );
-            $stmt->execute([
-                "name" => $name,
-                "email" => $email,
-                "password" => $password,
-            ]);
-        } catch (PDOException $e) {
-            throw new PDOException($e->getMessage());
+                ',
+        );
+        $stmt->execute([
+            "name" => $name,
+            "email" => $email,
+            "password" => $password,
+        ]);
+    }
+    public function select(string $email)
+    {
+        $stmt = $this->pdo->prepare("SELECT * FROM users WHERE email = :email");
+        $stmt->execute([
+            "email" => $email,
+        ]);
+
+        $data = $stmt->fetch();
+        if (!$data) {
+            return null;
         }
+        return $data;
     }
 }

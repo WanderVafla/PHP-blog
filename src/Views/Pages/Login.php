@@ -1,29 +1,46 @@
 <?php
 // argument (string $type, name $name, string $placeholder)
-require_once '../src/Views/components/input.php';
-require_once '../src/Views/components/head.php';
 
+use Wandervafla\PhpBlog\Actions\MessageErrorAction;
+
+require_once "../src/Views/components/input.php";
+require_once "../src/Views/components/head.php";
+
+$errorMessage = new MessageErrorAction();
 ?>
 
 <!doctype html>
 <html lang="en">
-    <?php head('Login') ?>
+    <?php head("Login"); ?>
     <body class="flex flex-col justify-center items-center w-lvw h-lvh gap-10">
         <h1>Sign in to your account</h1>
         <main class="main-form">
-            <form class="flex flex-col w-110 gap-5">
+            <form method="POST" class="flex flex-col w-110 gap-5">
+                <span class="error">
+                    <?= $errorMessage($errors, 'form') ?>
+                </span>
                 <label for="sing-in-email">Email address</label>
-                <?php input_with_border(type: 'text', placeholder: 'email'); ?>
-                <!--<input id="sing-in-email" type="email" name="email" />-->
-                
-                <label for="sing-in-password">Password</label>
-                <?php input_with_border(type: 'text', placeholder: 'Password'); ?>
-                <!--<input id="sing-in-password" type="password" name="password" />-->
+                <span class="error"><?= $errorMessage($errors, 'email') ?></span>
+                <?php input_with_border(
+                    type: "email",
+                    name: "email",
+                    placeholder: "email",
+                ); ?>
 
+                <label for="sing-in-password">Password</label>
+                <span class="error"><?= $errorMessage($errors, 'password') ?></span>
+                <?php input_with_border(
+                    type: "password",
+                    name: "password",
+                    placeholder: "Password",
+                ); ?>
+                <input type="hidden" name="csrf_token" value="<?= $_SESSION[
+                    "csrf_token"
+                ] ?>">
                 <button type="submit">Sing in</button>
             </form>
             <p>
-                No account? <a href="/singUp" class="link_text">Create one</a> - Back to <a href="/" class="link_text">Home Page</a>
+                No account? <a href="/singup" class="link_text">Create one</a> - Back to <a href="/" class="link_text">Home Page</a>
             </p>
         </main>
     </body>
