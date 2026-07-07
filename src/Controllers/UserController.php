@@ -34,6 +34,12 @@ class UserController
             $password = trim($_POST["password"]);
             $confirmPassword = trim($_POST["confirm-password"]);
 
+            if (empty($name)) {
+                $errors["username"] = MESSAGE_USERNAME_REQUIRE;
+            } elseif (str_word_count($name) > 1) {
+                $errors["username"] = MESSAGE_USERNAME_VALIDATE;
+            }
+
             ($this->messageEmailFilter)($errors, $email);
 
             if (empty($email)) {
