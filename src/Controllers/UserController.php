@@ -34,7 +34,7 @@ class UserController
             $password = trim($_POST["password"]);
             $confirmPassword = trim($_POST["confirm-password"]);
 
-            $errors["email"] = ($this->messageEmailFilter)($email);
+            ($this->messageEmailFilter)($errors, $email);
 
             if (empty($email)) {
                 $errors["email"] = MESSAGE_EMAIL_REQUIRE;
@@ -85,8 +85,7 @@ class UserController
 
             $email = $xssFilter($_POST["email"]);
             $password = trim($_POST["password"]);
-
-            $errors["email"] = ($this->messageEmailFilter)($email);
+            ($this->messageEmailFilter)($errors, $email);
 
             if (empty($password)) {
                 $errors["password"] = MESSAGE_PASSWORD_REQUIRE;
