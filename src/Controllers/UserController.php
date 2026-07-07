@@ -110,6 +110,8 @@ class UserController
                         if (password_verify($password, $userData["password"])) {
                             $_SESSION["user_id"] = $userData["id"];
                             $_SESSION["username"] = $userData["name"];
+                            header("Location: /");
+                            exit;
                         } else {
                             $errors["form"] = MESSAGE_LOGIN_FAILED;
                         }
