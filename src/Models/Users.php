@@ -34,7 +34,7 @@ class Users
     public function select(string $email)
     {
         try {
-            $stmt = $this->pdo->query(
+            $stmt = $this->pdo->prepare(
                 "SELECT * FROM users WHERE email = :email"
             );
             $stmt->execute([
