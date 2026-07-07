@@ -3,6 +3,7 @@ namespace Wandervafla\PhpBlog\Controllers;
 
 use PDOException;
 use Wandervafla\PhpBlog\Actions\Security\ValidateCsrfAction;
+use Wandervafla\PhpBlog\Filteres\MessageEmailFilter;
 use Wandervafla\PhpBlog\Filteres\PasswordComplexityFilter;
 use Wandervafla\PhpBlog\Filteres\XssFilter;
 use Wandervafla\PhpBlog\Models\Users;
@@ -11,10 +12,12 @@ class UserController
 {
     private static $viewPageDir = __DIR__ . "/../Views/Pages/";
     private Users $users;
+    private MessageEmailFilter $messageEmailFilter;
 
     public function __construct()
     {
         $this->users = new Users();
+        $this->messageEmailFilter = new MessageEmailFilter();
     }
     public function create()
     {
@@ -31,11 +34,7 @@ class UserController
             $password = trim($_POST["password"]);
             $confirmPassword = trim($_POST["confirm-password"]);
 
-            if (empty($name)) {
-                $errors["username"] = MESSAGE_USERNAME_REQUIRE;
-            } elseif (str_word_count($name) > 1) {
-                $errors["username"] = MESSAGE_USERNAME_VALIDATE;
-            }
+            $errors["email"] = ($this->messageEmailFilter)($email);
 
             if (empty($email)) {
                 $errors["email"] = MESSAGE_EMAIL_REQUIRE;
@@ -87,16 +86,11 @@ class UserController
             $email = $xssFilter($_POST["email"]);
             $password = trim($_POST["password"]);
 
-            // empty strings errors message;
-            if (empty($email)) {
-                $errors["email"] = MESSAGE_EMAIL_REQUIRE;
-            } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                $errors["email"] = MESSAGE_EMAIL_VALIDATE;
-            }
+            $errors["email"] = ($this->messageEmailFilter)($email);
+
             if (empty($password)) {
                 $errors["password"] = MESSAGE_PASSWORD_REQUIRE;
             }
-            // not valided datas
 
             try {
                 if (empty($errors)) {
