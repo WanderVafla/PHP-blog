@@ -43,12 +43,6 @@ class UserController
 
             ($this->messageEmailFilter)($errors, $email);
 
-            if (empty($email)) {
-                $errors["email"] = MESSAGE_EMAIL_REQUIRE;
-            } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                $errors["email"] = MESSAGE_EMAIL_VALIDATE;
-            }
-
             if (empty($password)) {
                 $errors["password"] = MESSAGE_PASSWORD_REQUIRE;
             } elseif (!$passwordValidate($password)) {
