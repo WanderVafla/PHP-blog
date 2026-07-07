@@ -15,6 +15,10 @@ class Session
             $_SESSION["csrf_token"] = bin2hex(random_bytes(32));
         }
     }
+    public static function destroySession()
+    {
+        session_destroy();
+    }
     public static function isLoggedIn(): bool
     {
         $username = $_SESSION[self::$username];
@@ -31,7 +35,8 @@ class Session
             header("Location: /login");
         }
     }
-    public static function isByCurrentUser(int $postUserId) {
+    public static function isByCurrentUser(int $postUserId)
+    {
         if ($postUserId === self::getUserId()) {
             return true;
         }
