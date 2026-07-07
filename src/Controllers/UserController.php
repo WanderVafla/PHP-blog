@@ -20,7 +20,6 @@ class UserController
     {
         $errors = [];
 
-        $users = new Users();
         $xssFilter = new XssFilter();
         $passwordValidate = new PasswordComplexityFilter();
 
