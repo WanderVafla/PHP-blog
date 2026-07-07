@@ -13,24 +13,25 @@ class UserController
     private static $viewPageDir = __DIR__ . "/../Views/Pages/";
     private Users $users;
     private MessageEmailFilter $messageEmailFilter;
+    private XssFilter $xssFilter;
 
     public function __construct()
     {
         $this->users = new Users();
         $this->messageEmailFilter = new MessageEmailFilter();
+        $this->xssFilter = new XssFilter();
     }
     public function create()
     {
         $errors = [];
 
-        $xssFilter = new XssFilter();
         $passwordValidate = new PasswordComplexityFilter();
 
         if ($_SERVER["REQUEST_METHOD"] === "POST") {
             ValidateCsrfAction::validate();
 
-            $name = $xssFilter($_POST["username"]);
-            $email = $xssFilter($_POST["email"]);
+            $name = ($this->xssFilter)($_POST["username"]);
+            $email = ($this->xssFilter)($_POST["email"]);
             $password = trim($_POST["password"]);
             $confirmPassword = trim($_POST["confirm-password"]);
 
@@ -85,11 +86,10 @@ class UserController
     public function login()
     {
         $errors = [];
-        $xssFilter = new XssFilter();
         if ($_SERVER["REQUEST_METHOD"] === "POST") {
             ValidateCsrfAction::validate();
 
-            $email = $xssFilter($_POST["email"]);
+            $email = ($this->xssFilter)($_POST["email"]);
             $password = trim($_POST["password"]);
             ($this->messageEmailFilter)($errors, $email);
 
