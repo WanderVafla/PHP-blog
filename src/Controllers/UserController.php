@@ -34,28 +34,25 @@ class UserController
 
             if (empty($name)) {
                 $errors["username"] = MESSAGE_USERNAME_REQUIRE;
-            }
-            if (empty($email)) {
-                $errors["email"] = MESSAGE_EMAIL_REQUIRE;
-            }
-            if (empty($password)) {
-                $errors["password"] = MESSAGE_PASSWORD_REQUIRE;
-            }
-            if (empty($password)) {
-                $errors["confirm-password"] = MESSAGE_CONFITM_PASSWORD_REQUIRE;
-            }
-
-            if (str_word_count($name) > 1) {
+            } elseif (str_word_count($name) > 1) {
                 $errors["username"] = MESSAGE_USERNAME_VALIDATE;
             }
-            if (!filter_var($email, FILTER_VALIDATE_EMAIL) && !empty($email)) {
+
+            if (empty($email)) {
+                $errors["email"] = MESSAGE_EMAIL_REQUIRE;
+            } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
                 $errors["email"] = MESSAGE_EMAIL_VALIDATE;
             }
-            if (!$passwordValidate($password) && !empty($password)) {
+
+            if (empty($password)) {
+                $errors["password"] = MESSAGE_PASSWORD_REQUIRE;
+            } elseif (!$passwordValidate($password)) {
                 $errors["password"] = MESSAGE_PASSWORD_VALIDATE_COMPLEXITY;
             }
 
-            if ($password !== $confirmPassword && !empty($confirmPassword)) {
+            if (empty($confirmPassword)) {
+                $errors["confirm-password"] = MESSAGE_CONFITM_PASSWORD_REQUIRE;
+            } elseif ($password !== $confirmPassword) {
                 $errors["confirm-password"] = MESSAGE_CONFITM_PASSWORD_VALIDATE;
             }
 
@@ -87,21 +84,20 @@ class UserController
         $xssFilter = new XssFilter();
         if ($_SERVER["REQUEST_METHOD"] === "POST") {
             new ValidateCsrfAction();
-            
+
             $email = $xssFilter($_POST["email"]);
             $password = trim($_POST["password"]);
 
             // empty strings errors message;
             if (empty($email)) {
                 $errors["email"] = MESSAGE_EMAIL_REQUIRE;
+            } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                $errors["email"] = MESSAGE_EMAIL_VALIDATE;
             }
             if (empty($password)) {
                 $errors["password"] = MESSAGE_PASSWORD_REQUIRE;
             }
             // not valided datas
-            if (!empty($email) && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                $errors["email"] = MESSAGE_EMAIL_VALIDATE;
-            }
 
             try {
                 if (empty($errors)) {
@@ -111,7 +107,7 @@ class UserController
                             $_SESSION["user_id"] = $userData["id"];
                             $_SESSION["username"] = $userData["name"];
                             header("Location: /");
-                            exit;
+                            exit();
                         } else {
                             $errors["form"] = MESSAGE_LOGIN_FAILED;
                         }
