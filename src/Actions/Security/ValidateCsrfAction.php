@@ -5,7 +5,7 @@ use Exception;
 
 class ValidateCsrfAction
 {
-    public function __construct()
+    public static function validate()
     {
         if (
             !isset($_POST["csrf_token"]) ||

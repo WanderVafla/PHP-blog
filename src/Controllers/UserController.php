@@ -27,7 +27,7 @@ class UserController
         $passwordValidate = new PasswordComplexityFilter();
 
         if ($_SERVER["REQUEST_METHOD"] === "POST") {
-            new ValidateCsrfAction();
+            ValidateCsrfAction::validate();
 
             $name = $xssFilter($_POST["username"]);
             $email = $xssFilter($_POST["email"]);
@@ -81,7 +81,7 @@ class UserController
         $errors = [];
         $xssFilter = new XssFilter();
         if ($_SERVER["REQUEST_METHOD"] === "POST") {
-            new ValidateCsrfAction();
+            ValidateCsrfAction::validate();
 
             $email = $xssFilter($_POST["email"]);
             $password = trim($_POST["password"]);

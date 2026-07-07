@@ -45,7 +45,7 @@ class PostController
         }
 
         if ($_SERVER["REQUEST_METHOD"] === "POST") {
-            new ValidateCsrfAction();
+            ValidateCsrfAction::validate();
             // Just invoke Object for use her after
             $titleStrlenFilter = new MaxStrlenFilter();
             $uploadImageAction = new UploadImageAction();
