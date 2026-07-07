@@ -24,7 +24,7 @@ switch ($request) {
     case '/login':
         $controllerUsers->login();
         break;
-    case '/singUp':
+    case '/singup':
         $controllerUsers->create();
         break;
     case '/createPost':
