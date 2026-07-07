@@ -108,7 +108,7 @@ class UserController
                     }
                 }
             } catch (PDOException $e) {
-                echo $e->getMessage();
+                throw new PDOException($e->getMessage());
             }
         }
         require self::$viewPageDir . "Login.php";
