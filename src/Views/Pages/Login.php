@@ -11,9 +11,11 @@ require_once "../src/Views/components/head.php";
         <h1>Sign in to your account</h1>
         <main class="main-form">
             <form method="POST" class="flex flex-col w-110 gap-5">
-                <span class="error" ><?= $errors['form']?></span>
+                <span class="error" ><?= htmlspecialchars(
+                    $errors["form"] ?? "",
+                ) ?></span>
                 <label for="sing-in-email">Email address</label>
-                <span class="error"><?= $errors['email'] ?></span>
+                <span class="error"><?= htmlspecialchars($errors["email"] ?? "") ?></span>
                 <?php input_with_border(
                     type: "email",
                     name: "email",
@@ -21,7 +23,7 @@ require_once "../src/Views/components/head.php";
                 ); ?>
 
                 <label for="sing-in-password">Password</label>
-                <span class="error"><?= $errors['password'] ?></span>
+                <span class="error"><?= htmlspecialchars($errors["password"] ?? "") ?></span>
                 <?php input_with_border(
                     type: "password",
                     name: "password",
