@@ -31,6 +31,12 @@ class Session
             header("Location: /login");
         }
     }
+    public static function isByCurrentUser(int $postUserId) {
+        if ($postUserId === self::getUserId()) {
+            return true;
+        }
+        return false;
+    }
     public static function getUsername(): string
     {
         return $_SESSION[self::$username];

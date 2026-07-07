@@ -6,6 +6,7 @@ use Wandervafla\PhpBlog\Models\Posts;
 use Wandervafla\PhpBlog\Actions\UploadImageAction;
 use Wandervafla\PhpBlog\Filteres\MaxStrlenFilter;
 use Wandervafla\PhpBlog\Filteres\XssFilter;
+use Wandervafla\PhpBlog\Core\Session;
 
 use Exception;
 
@@ -21,15 +22,11 @@ class PostController
     public function upster()
     {
         Session::notLoggedRedirect();
-        
+
         $postModel = new Posts();
         $xssFilter = new XssFilter();
 
         $errors = [];
-
-        // HARDCODED for test
-        (string) ($created_at = "test");
-        (string) ($user_id = 1);
 
         (int) ($id = $_GET["id"] ?? null);
 
@@ -38,6 +35,10 @@ class PostController
             if (!$data) {
                 http_response_code(404);
                 exit("Post not found");
+            }
+            if (!Session::isByCurrentUser($data['user_id'])) {
+                header("Location: /post?id=$id");
+                exit();
             }
             $title = $content = $image = "";
 
@@ -49,10 +50,14 @@ class PostController
         if ($_SERVER["REQUEST_METHOD"] === "POST") {
             ValidateCsrfAction::validate();
             // Just invoke Object for use her after
+
             $titleStrlenFilter = new MaxStrlenFilter();
             $uploadImageAction = new UploadImageAction();
 
             $new_title = $xssFilter($_POST["title"]);
+
+            (string) ($created_at = Session::getUsername());
+            (int) ($user_id = Session::getUserId());
 
             if (empty($new_title)) {
                 $errors["title"] = "Title is reuquired";
@@ -92,6 +97,8 @@ class PostController
                     created_at: $created_at,
                     user_id: $user_id,
                 );
+                header("Location: /");
+                exit();
             }
         }
         if (isset($id)) {
@@ -104,11 +111,11 @@ class PostController
     {
         (int) ($id = $_GET["id"]);
         $data = new Posts()->fetchOne(id: $id);
-        if (!isset($data)){
+        if (!isset($data)) {
             http_response_code(404);
             die("Post is not exit");
         }
-        
+
         $title = $data["title"];
         $content = $data["content"];
         $image_path = $data["image"];
