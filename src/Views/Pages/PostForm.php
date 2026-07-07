@@ -1,7 +1,11 @@
 <?php
+use Wandervafla\PhpBlog\Actions\MessageErrorAction;
+
 require_once "../src/Views/components/input.php";
 require_once "../src/Views/components/textarea.php";
 require_once "../src/Views/components/head.php";
+
+$errorMessage = new MessageErrorAction();
 ?>
 
 <!doctype html>
@@ -17,21 +21,23 @@ require_once "../src/Views/components/head.php";
                 <mark>New Post</mark>
             </h1>
             <form action="" method="post" enctype="multipart/form-data" class="flex flex-col gap-5 items-end">
-                <span class="errors"><?= $errors['title'] ?></span>
+                <span class="errors"><?= $errorMessage($errors, "title") ?></span>
                 <?php input_with_border(
                     type: "text",
                     name: "title",
                     placeholder: "Title",
                 ); ?>
-                <span class="error">* <?= $errors['content'] ?></span>
+                <span class="error">* <?= $errorMessage($errors, "content") ?></span>
                 <?php textarea(name: "content", placeholder: "Description"); ?>
-                <span class="error">* <?= $errors['image'] ?></span>
+                <span class="error">* <?= $errorMessage($errors, "image") ?></span>
                 <?php input_with_border(
                     type: "file",
                     name: "image",
                     placeholder: "Image",
                 ); ?>
-                <input type="hidden" name="csrf_token" value="<?= $_SESSION["csrf_token"] ?>">
+                <input type="hidden" name="csrf_token" value="<?= $_SESSION[
+                    "csrf_token"
+                ] ?>">
 
                 <button class="justify-end" type="submit">Publish</button>
             </form>
