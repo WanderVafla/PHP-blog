@@ -84,8 +84,11 @@ class UserController
     public function login()
     {
         $errors = [];
+        $xssFilter = new XssFilter();
         if ($_SERVER["REQUEST_METHOD"] === "POST") {
-            $email = $_POST["email"];
+            new ValidateCsrfAction();
+            
+            $email = $xssFilter($_POST["email"]);
             $password = trim($_POST["password"]);
 
             // empty strings errors message;
