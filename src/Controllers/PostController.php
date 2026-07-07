@@ -20,6 +20,8 @@ class PostController
     }
     public function upster()
     {
+        Session::notLoggedRedirect();
+        
         $postModel = new Posts();
         $xssFilter = new XssFilter();
 

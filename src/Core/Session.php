@@ -25,6 +25,12 @@ class Session
         }
         return false;
     }
+    public static function notLoggedRedirect()
+    {
+        if (!self::isLoggedIn()) {
+            header("Location: /login");
+        }
+    }
     public static function getUsername(): string
     {
         return $_SESSION[self::$username];
