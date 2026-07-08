@@ -3,6 +3,7 @@ use Wandervafla\PhpBlog\Core\Session;
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     Session::destroySession();
+    $_SESSION['last_action'] = FLASH_MESSAGE_SINOUT;
     header("Location: /");
     exit;
 }
