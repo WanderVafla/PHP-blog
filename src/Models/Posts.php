@@ -63,6 +63,7 @@ class Posts
                 ":created_at" => $created_at,
                 ":user_id" => $user_id,
             ]);
+            return $this->pdo->lastInsertId();
         } catch (PDOException $e) {
             throw new PDOException($e->getMessage());
         }

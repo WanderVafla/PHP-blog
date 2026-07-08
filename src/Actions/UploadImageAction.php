@@ -3,7 +3,6 @@ namespace Wandervafla\PhpBlog\Actions;
 
 use Exception;
 use finfo;
-use StreamBucket;
 
 class UploadImageAction
 {

@@ -2,13 +2,11 @@
 require_once __DIR__ . '/../vendor/autoload.php';
 require_once '../src/constants.php';
 
-use Wandervafla\PhpBlog\Actions\Actions;
 use Wandervafla\PhpBlog\Controllers\PostController;
-use Wandervafla\PhpBlog\Actions\Security\InitSessionAction;
 use Wandervafla\PhpBlog\Controllers\UserController;
+use Wandervafla\PhpBlog\Core\Session;
 
-new InitSessionAction();
-
+Session::initSession();
 
 $controller = new PostController();
 $controllerUsers = new UserController();
@@ -22,10 +20,10 @@ switch ($request) {
         $controller->home();
         break;
     case '/login':
-        $controllerUsers->login();
+        $controllerUsers->auth('login');
         break;
     case '/singup':
-        $controllerUsers->create();
+        $controllerUsers->auth('singup');
         break;
     case '/createPost':
         $controller->upster();

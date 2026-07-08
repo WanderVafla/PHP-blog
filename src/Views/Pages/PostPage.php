@@ -9,8 +9,10 @@ require_once '../src/Views/components/head.php';
     <?php head('Post page') ?>
     <body>
         <?php require '../src/Views/components/nav.php'; ?>
-            <!--Image of Post (DIV is test)-->
-            <img src="<?= htmlspecialchars($image_path) ?>" alt="Image Post" class="h-60 w-lvw object-cover shadow-xl" />
+        <img src="<?= htmlspecialchars($image_path) ?>" alt="Image Post" class="h-60 w-lvw object-cover shadow-xl" />
+        <?php if ($isCreatedByCurrentUser): ?>
+        <button><a href="/createPost?id=<?= strval($id) ?>">Edit</a></button>
+        <?php endif; ?>
         <main class="flex justify-between px-10 py-5 gap-5">
             <div class="flex-1">
                 <h1 class="sticky top-10 text-balance"><?= htmlspecialchars($title) ?></h1>
