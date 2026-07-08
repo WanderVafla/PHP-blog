@@ -2,3 +2,4 @@
 database.db
 /node_modules
 /public/images
+public/output.css
