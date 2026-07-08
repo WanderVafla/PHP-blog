@@ -34,7 +34,7 @@ switch ($request) {
 }
     if (!empty($_SESSION['last_action'])) {
         require 'message.php';
-        $_SESSION['last_action'] = '';
+        unset($_SESSION['last_action']);
     }
 
 ?>
