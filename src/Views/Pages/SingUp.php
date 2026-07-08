@@ -1,10 +1,6 @@
 <?php
-use Wandervafla\PhpBlog\Actions\MessageErrorAction;
-
 require_once "../src/Views/components/input.php";
 require_once "../src/Views/components/head.php";
-
-$errorMessage = new MessageErrorAction();
 ?>
 <!doctype html>
 <html lang="en">
