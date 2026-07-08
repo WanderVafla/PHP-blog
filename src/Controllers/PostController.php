@@ -36,7 +36,7 @@ class PostController
                 http_response_code(404);
                 exit("Post not found");
             }
-            if (!Session::isByCurrentUser($data['user_id'])) {
+            if (!Session::isByCurrentUser($data['user_id']) && Session::getUserRole() !== 'admin') {
                 header("Location: /post?id=$id");
                 exit();
             }
@@ -49,7 +49,6 @@ class PostController
 
         if ($_SERVER["REQUEST_METHOD"] === "POST") {
             ValidateCsrfAction::validate();
-            // Just invoke Object for use her after
 
             $titleStrlenFilter = new MaxStrlenFilter();
             $uploadImageAction = new UploadImageAction();
@@ -120,8 +119,7 @@ class PostController
             http_response_code(404);
             die("Post is not exit");
         }
-        (bool) $isCreatedByCurrentUser = Session::isByCurrentUser($data['user_id']);
-
+        (bool) $isCreatedByCurrentUser = Session::isByCurrentUser($data['user_id']) || Session::getUserRole() === 'admin';
         $title = $data["title"];
         $content = $data["content"];
         $image_path = $data["image"];
