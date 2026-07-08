@@ -3,11 +3,10 @@ require_once __DIR__ . '/../vendor/autoload.php';
 require_once '../src/constants.php';
 
 use Wandervafla\PhpBlog\Controllers\PostController;
-use Wandervafla\PhpBlog\Actions\Security\InitSessionAction;
 use Wandervafla\PhpBlog\Controllers\UserController;
+use Wandervafla\PhpBlog\Core\Session;
 
-new InitSessionAction();
-
+Session::initSession();
 
 $controller = new PostController();
 $controllerUsers = new UserController();
