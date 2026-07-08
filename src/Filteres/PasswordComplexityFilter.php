@@ -5,7 +5,7 @@ use Exception;
 
 class PasswordComplexityFilter
 {
-    private static $pattern = '/^(?=.*[az])(?=.*[AZ])(?=.*\d)(?=.*[\W_]).{8,}$/';
+    private static $pattern = '/^(?=.*\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[\W_]).{8,}$/';
 
     public function __invoke(string $password)
     {
