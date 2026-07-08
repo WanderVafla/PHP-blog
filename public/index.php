@@ -21,10 +21,10 @@ switch ($request) {
         $controller->home();
         break;
     case '/login':
-        $controllerUsers->login();
+        $controllerUsers->auth('login');
         break;
     case '/singup':
-        $controllerUsers->create();
+        $controllerUsers->auth('singup');
         break;
     case '/createPost':
         $controller->upster();

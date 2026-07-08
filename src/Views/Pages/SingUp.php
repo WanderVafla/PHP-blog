@@ -44,6 +44,7 @@ require_once "../src/Views/components/head.php";
                     name: "confirm-password",
                     placeholder: "Password",
                 ); ?>
+                <input type="hidden" name="authAction" value="singup">
                 <input type="hidden" name="csrf_token" value="<?= $_SESSION[
                     "csrf_token"
                 ] ?>">

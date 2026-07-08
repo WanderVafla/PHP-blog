@@ -28,6 +28,7 @@ require_once "../src/Views/components/head.php";
                     name: "password",
                     placeholder: "Password",
                 ); ?>
+                <input type="hidden" name="authAction" value="login">
                 <input type="hidden" name="csrf_token" value="<?= $_SESSION[
                     "csrf_token"
                 ] ?>">
