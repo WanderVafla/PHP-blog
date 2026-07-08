@@ -40,7 +40,7 @@ switch ($request) {
         break;
 }
 if (!empty($_SESSION["last_action"])) {
-    require "message.php";
+    require "../src/Views/components/message.php";
     unset($_SESSION["last_action"]);
 }
 
