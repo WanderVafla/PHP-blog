@@ -6,6 +6,14 @@ class Session
     private static $username = "username";
     private static $user_id = "user_id";
 
+    public static function getUsername(): ?string
+    {
+        return $_SESSION[self::$username];
+    }
+    public static function getUserId(): ?int
+    {
+        return $_SESSION[self::$user_id];
+    }
     public static function initSession()
     {
         if (session_status() === PHP_SESSION_NONE) {
@@ -41,13 +49,5 @@ class Session
             return true;
         }
         return false;
-    }
-    public static function getUsername(): string
-    {
-        return $_SESSION[self::$username];
-    }
-    public static function getUserId(): int
-    {
-        return $_SESSION[self::$user_id];
     }
 }
