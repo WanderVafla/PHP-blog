@@ -43,6 +43,7 @@ class UserController
                     if (password_verify($password, $userData["password"])) {
                         $_SESSION["user_id"] = $userData["id"];
                         $_SESSION["username"] = $userData["name"];
+                        $_SESSION['last_action'] = FLASH_MESSAGE_LOGGED;
                         header("Location: /");
                         exit();
                     } else {
@@ -71,6 +72,7 @@ class UserController
                             email: $email,
                             password: password_hash($password, PASSWORD_BCRYPT),
                         );
+                        $_SESSION['last_action'] = FLASH_MESSAGE_SINGUP;
                         header("Location: /login");
                         exit();
                     }
