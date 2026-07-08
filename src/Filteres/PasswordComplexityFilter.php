@@ -7,7 +7,7 @@ class PasswordComplexityFilter
 {
     private static $pattern = '/^(?=.*\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[\W_]).{8,}$/';
 
-    public function __invoke(string $password)
+    public static function validate(string $password)
     {
         if (
             filter_var($password, FILTER_CALLBACK, [
