@@ -1,6 +1,6 @@
 <?php
-require_once __DIR__ . '/../vendor/autoload.php';
-require_once '../src/constants.php';
+require_once __DIR__ . "/../vendor/autoload.php";
+require_once "../src/constants.php";
 
 use Wandervafla\PhpBlog\Controllers\PostController;
 use Wandervafla\PhpBlog\Controllers\UserController;
@@ -16,7 +16,6 @@ $viewPagesDir = '../src/Views/Pages/';
 switch ($request) {
     case '':
     case '/':
-    
         $controller->home();
         break;
     case '/login':
@@ -31,10 +30,18 @@ switch ($request) {
     case '/post':
         $controller->open();
         break;
+    case "/logout":
+        if ($_SERVER["REQUEST_METHOD"] === "POST") {
+            Session::destroySession();
+            $_SESSION["last_action"] = FLASH_MESSAGE_SINOUT;
+            header("Location: /");
+            exit();
+        }
+        break;
 }
-    if (!empty($_SESSION['last_action'])) {
-        require 'message.php';
-        unset($_SESSION['last_action']);
-    }
+if (!empty($_SESSION["last_action"])) {
+    require "message.php";
+    unset($_SESSION["last_action"]);
+}
 
 ?>
