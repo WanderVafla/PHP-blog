@@ -14,7 +14,7 @@ require_once "../src/Views/components/head.php";
                     <?= htmlspecialchars($errors['form'] ?? "") ?>
                 </span>
                 <label for="sing-in-email">Email address</label>
-                <span class="error"><?= htmlspecialchars($errors['email']) ?></span>
+                <span class="error"><?= htmlspecialchars($errors['email'] ?? "") ?></span>
                 <?php input_with_border(
                     type: "email",
                     name: "email",
