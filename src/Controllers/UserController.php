@@ -4,8 +4,6 @@ namespace Wandervafla\PhpBlog\Controllers;
 use PDOException;
 use Wandervafla\PhpBlog\Actions\Security\ValidateCsrfAction;
 use Wandervafla\PhpBlog\Core\DisplayErrors;
-use Wandervafla\PhpBlog\Filteres\MessageEmailFilter;
-use Wandervafla\PhpBlog\Filteres\PasswordComplexityFilter;
 use Wandervafla\PhpBlog\Filteres\XssFilter;
 use Wandervafla\PhpBlog\Models\Users;
 
@@ -14,13 +12,11 @@ class UserController
     private static $viewPageDir = __DIR__ . "/../Views/Pages/";
 
     private Users $users;
-    private MessageEmailFilter $messageEmailFilter;
     private XssFilter $xssFilter;
 
     public function __construct()
     {
         $this->users = new Users();
-        $this->messageEmailFilter = new MessageEmailFilter();
         $this->xssFilter = new XssFilter();
     }
     // TODO: Faire test to login and singup pages!
@@ -47,6 +43,7 @@ class UserController
                     if (password_verify($password, $userData["password"])) {
                         $_SESSION["user_id"] = $userData["id"];
                         $_SESSION["username"] = $userData["name"];
+                        $_SESSION['last_action'] = FLASH_MESSAGE_LOGGED;
                         header("Location: /");
                         exit();
                     } else {
@@ -75,6 +72,7 @@ class UserController
                             email: $email,
                             password: password_hash($password, PASSWORD_BCRYPT),
                         );
+                        $_SESSION['last_action'] = FLASH_MESSAGE_SINGUP;
                         header("Location: /login");
                         exit();
                     }

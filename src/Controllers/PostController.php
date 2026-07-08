@@ -97,6 +97,11 @@ class PostController
                     created_at: $created_at,
                     user_id: $user_id,
                 );
+                if (isset($id)) {
+                    $_SESSION['last_action'] = FLASH_MESSAGE_EDITED;
+                } else {
+                    $_SESSION['last_action'] = FLASH_MESSAGE_CREATED;
+                }
                 header("Location: /post?id=$insertedId");
                 exit();
             }

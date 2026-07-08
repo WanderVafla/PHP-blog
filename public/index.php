@@ -13,10 +13,10 @@ $controllerUsers = new UserController();
 
 $request = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $viewPagesDir = '../src/Views/Pages/';
-
 switch ($request) {
     case '':
     case '/':
+    
         $controller->home();
         break;
     case '/login':
@@ -32,5 +32,9 @@ switch ($request) {
         $controller->open();
         break;
 }
+    if (!empty($_SESSION['last_action'])) {
+        require 'message.php';
+        unset($_SESSION['last_action']);
+    }
 
 ?>

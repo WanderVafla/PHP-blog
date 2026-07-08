@@ -25,7 +25,8 @@ class Session
     }
     public static function destroySession()
     {
-        session_destroy();
+        unset($_SESSION[self::$username]);
+        unset($_SESSION[self::$user_id]);
     }
     public static function isLoggedIn(): bool
     {
