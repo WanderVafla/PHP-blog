@@ -52,7 +52,7 @@ class Session
     }
     public static function isByCurrentUser(int $postUserId)
     {
-        if (self::getUserId() !== null && $postUserId === self::getUserId()) {
+        if (self::getUserId() !== null && $postUserId === self::getUserId() || self::getUserRole() === 'admin') {
             return true;
         }
         return false;

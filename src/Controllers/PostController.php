@@ -120,7 +120,7 @@ class PostController
             http_response_code(404);
             die("Post is not exit");
         }
-        (bool) $isCreatedByCurrentUser = Session::isByCurrentUser($data['user_id']) || Session::getUserRole() === 'admin';
+        (bool) $isCreatedByCurrentUser = Session::isByCurrentUser($data['user_id']);
         $title = $data["title"];
         $content = $data["content"];
         $image_path = $data["image"];
@@ -134,7 +134,7 @@ class PostController
     {
         $id = $_GET['id'];
         $data = new Posts()->fetchOne(id: $id);
-        (bool) $isCreatedByCurrentUser = Session::isByCurrentUser($data['user_id']) || Session::getUserRole() === 'admin';
+        (bool) $isCreatedByCurrentUser = Session::isByCurrentUser($data['user_id']);
         if ($isCreatedByCurrentUser) {
             new Posts()->delete($id);
         }
