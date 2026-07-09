@@ -1,12 +1,5 @@
 <?php
 use Wandervafla\PhpBlog\Core\Session;
-
-if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    Session::destroySession();
-    $_SESSION['last_action'] = FLASH_MESSAGE_SINOUT;
-    header("Location: /");
-    exit;
-}
 ?>
 
 <nav class="flex justify-between items-center px-5 py-3">
@@ -16,7 +9,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             <button type="button"><a href="/login">Login</a></button>
             <button type="button"><a href="/singup">Reg in</a></button>
         <?php else: ?>
-            <form action="" method="post">
+            <form action="/logout" method="post">
                 <button type="submit">Log out</button>
             </form>
         <?php endif; ?>

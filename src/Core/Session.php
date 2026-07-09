@@ -5,6 +5,7 @@ class Session
 {
     private static $username = "username";
     private static $user_id = "user_id";
+    private static $user_role = "role";
 
     public static function getUsername(): ?string
     {
@@ -13,6 +14,10 @@ class Session
     public static function getUserId(): ?int
     {
         return $_SESSION[self::$user_id];
+    }
+    public static function getUserRole(): ?string
+    {
+        return $_SESSION[self::$user_role];
     }
     public static function initSession()
     {
@@ -27,6 +32,7 @@ class Session
     {
         unset($_SESSION[self::$username]);
         unset($_SESSION[self::$user_id]);
+        unset($_SESSION[self::$user_role]);
     }
     public static function isLoggedIn(): bool
     {
@@ -46,7 +52,7 @@ class Session
     }
     public static function isByCurrentUser(int $postUserId)
     {
-        if ($postUserId === self::getUserId()) {
+        if (self::getUserId() !== null && $postUserId === self::getUserId() || self::getUserRole() === 'admin') {
             return true;
         }
         return false;

@@ -1,6 +1,6 @@
 <?php
-require_once __DIR__ . '/../vendor/autoload.php';
-require_once '../src/constants.php';
+require_once __DIR__ . "/../vendor/autoload.php";
+require_once "../src/constants.php";
 
 use Wandervafla\PhpBlog\Controllers\PostController;
 use Wandervafla\PhpBlog\Controllers\UserController;
@@ -31,9 +31,19 @@ switch ($request) {
     case '/post':
         $controller->open();
         break;
+    case "/logout":
+        $controllerUsers->singout();
+        break;
+    case "/removePost":
+        $controller->remove();
+        break;
+}
+if (!empty($_SESSION["last_action"])) {
+    require "../src/Views/components/message.php";
+    unset($_SESSION["last_action"]);
 }
     if (!empty($_SESSION['last_action'])) {
-        require 'message.php';
+        require '../src/Views/components/message.php';
         unset($_SESSION['last_action']);
     }
 

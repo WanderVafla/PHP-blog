@@ -36,7 +36,7 @@ class PostController
                 http_response_code(404);
                 exit("Post not found");
             }
-            if (!Session::isByCurrentUser($data['user_id'])) {
+            if (!Session::isByCurrentUser($data['user_id']) && Session::getUserRole() !== 'admin') {
                 header("Location: /post?id=$id");
                 exit();
             }
@@ -49,12 +49,11 @@ class PostController
 
         if ($_SERVER["REQUEST_METHOD"] === "POST") {
             ValidateCsrfAction::validate();
-            // Just invoke Object for use her after
 
             $titleStrlenFilter = new MaxStrlenFilter();
             $uploadImageAction = new UploadImageAction();
 
-            $new_title = $xssFilter($_POST["title"]);
+            $new_title = $_POST["title"];
 
             (string) ($created_at = Session::getUsername());
             (int) ($user_id = Session::getUserId());
@@ -65,7 +64,7 @@ class PostController
                 $errors["title"] = "Title should be less that 20 characters";
             }
 
-            $new_content = $xssFilter($_POST["content"]);
+            $new_content = $_POST["content"];
             if (empty($new_content)) {
                 $errors["content"] = "Title is reuquired";
             }
@@ -99,10 +98,11 @@ class PostController
                 );
                 if (isset($id)) {
                     $_SESSION['last_action'] = FLASH_MESSAGE_EDITED;
+                    header("Location: /post?id=$id");
                 } else {
                     $_SESSION['last_action'] = FLASH_MESSAGE_CREATED;
+                    header("Location: /post?id=$insertedId");
                 }
-                header("Location: /post?id=$insertedId");
                 exit();
             }
         }
@@ -121,7 +121,6 @@ class PostController
             die("Post is not exit");
         }
         (bool) $isCreatedByCurrentUser = Session::isByCurrentUser($data['user_id']);
-
         $title = $data["title"];
         $content = $data["content"];
         $image_path = $data["image"];
@@ -130,5 +129,16 @@ class PostController
         }
 
         require self::$viewPageDir . "PostPage.php";
+    }
+    public function remove()
+    {
+        $id = $_GET['id'];
+        $data = new Posts()->fetchOne(id: $id);
+        (bool) $isCreatedByCurrentUser = Session::isByCurrentUser($data['user_id']);
+        if ($isCreatedByCurrentUser) {
+            new Posts()->delete($id);
+        }
+        // TODO: Understand why this not work!
+        header("Location: /");
     }
 }

@@ -6,6 +6,7 @@ use Wandervafla\PhpBlog\Actions\Security\ValidateCsrfAction;
 use Wandervafla\PhpBlog\Core\DisplayErrors;
 use Wandervafla\PhpBlog\Filteres\XssFilter;
 use Wandervafla\PhpBlog\Models\Users;
+use Wandervafla\PhpBlog\Core\Session;
 
 class UserController
 {
@@ -19,7 +20,15 @@ class UserController
         $this->users = new Users();
         $this->xssFilter = new XssFilter();
     }
-    // TODO: Faire test to login and singup pages!
+    public function singout()
+    {
+        if ($_SERVER["REQUEST_METHOD"] === "POST") {
+            Session::destroySession();
+            $_SESSION["last_action"] = FLASH_MESSAGE_SINOUT;
+            header("Location: /");
+            exit();
+        }
+    }
     public function auth(string $authAction)
     {
         $errors = [];
@@ -43,11 +52,15 @@ class UserController
                     if (password_verify($password, $userData["password"])) {
                         $_SESSION["user_id"] = $userData["id"];
                         $_SESSION["username"] = $userData["name"];
-                        $_SESSION['last_action'] = FLASH_MESSAGE_LOGGED;
+                        $_SESSION["role"] = $userData['role'];
+                        $_SESSION["last_action"] = FLASH_MESSAGE_LOGGED;
                         header("Location: /");
                         exit();
                     } else {
-                        DisplayErrors::checkLogin(errors: $errors, userData: $userData);
+                        DisplayErrors::checkLogin(
+                            errors: $errors,
+                            userData: $userData,
+                        );
                     }
                 }
             }
@@ -58,11 +71,11 @@ class UserController
                 $confirmPassword = trim($_POST["confirm-password"]);
 
                 DisplayErrors::checkSingup(
-                errors: $errors,
-                name:$name,
-                email: $email,
-                password: $password,
-                confirmPassword: $confirmPassword
+                    errors: $errors,
+                    name: $name,
+                    email: $email,
+                    password: $password,
+                    confirmPassword: $confirmPassword,
                 );
 
                 try {
@@ -72,7 +85,7 @@ class UserController
                             email: $email,
                             password: password_hash($password, PASSWORD_BCRYPT),
                         );
-                        $_SESSION['last_action'] = FLASH_MESSAGE_SINGUP;
+                        $_SESSION["last_action"] = FLASH_MESSAGE_SINGUP;
                         header("Location: /login");
                         exit();
                     }
