@@ -2,7 +2,7 @@
 use Wandervafla\PhpBlog\Core\Session;
 ?>
 
-<nav class="flex justify-between items-center px-5 py-3">
+<nav class="flex relative justify-between items-center px-5 py-3">
     <p class="text-5xl font-bold"><a href="\">PHP blog</a></p>
     <span class="flex gap-3">
         <?php if (!Session::isLoggedIn()): ?>
