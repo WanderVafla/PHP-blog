@@ -12,7 +12,7 @@ use Wandervafla\PhpBlog\Core\Session;
             <div class="size-10 bg-blue-500 rounded-4xl text-center justify-center items-center hover:[&>div]:flex" >
                 U
                 <div class="hidden flex-col">
-                    <button type="button"><a>Profil</a></button>
+                    <button type="button"><a href="/profil">Profil</a></button>
                     <button type="button"><a href="/logout">Log out</a></button>
                 </div>
             </div>
