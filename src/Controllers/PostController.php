@@ -36,7 +36,7 @@ class PostController
                 http_response_code(404);
                 exit("Post not found");
             }
-            if (!Session::isByCurrentUser($data['user_id']) && Session::getUserRole() !== 'admin') {
+            if (!Session::isByCurrentUser($data['user_id'])) {
                 header("Location: /post?id=$id");
                 exit();
             }
