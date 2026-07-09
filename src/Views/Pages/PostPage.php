@@ -11,7 +11,8 @@ require_once '../src/Views/components/head.php';
         <?php require '../src/Views/components/nav.php'; ?>
         <img src="<?= htmlspecialchars($image_path) ?>" alt="Image Post" class="h-60 w-lvw object-cover shadow-xl" />
         <?php if ($isCreatedByCurrentUser): ?>
-        <button><a href="/createPost?id=<?= strval($id) ?>">Edit</a></button>
+            <button><a href="/createPost?id=<?= strval($id) ?>">Edit</a></button>
+            <button><a href="/removePost?id=<?= strval($id) ?>">Remove</a></button>
         <?php endif; ?>
         <main class="flex justify-between px-10 py-5 gap-5">
             <div class="flex-1">

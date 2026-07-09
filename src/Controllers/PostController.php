@@ -130,4 +130,15 @@ class PostController
 
         require self::$viewPageDir . "PostPage.php";
     }
+    public function remove()
+    {
+        $id = $_GET['id'];
+        $data = new Posts()->fetchOne(id: $id);
+        (bool) $isCreatedByCurrentUser = Session::isByCurrentUser($data['user_id']) || Session::getUserRole() === 'admin';
+        if ($isCreatedByCurrentUser) {
+            new Posts()->delete($id);
+        }
+        // TODO: Understand why this not work!
+        header("Location: /");
+    }
 }

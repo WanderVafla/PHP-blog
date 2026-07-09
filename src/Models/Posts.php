@@ -34,6 +34,13 @@ class Posts
             die("Query failed: " . $e->getMessage());
         }
     }
+    public function delete(int $id)
+    {
+        $stmt = $this->pdo->prepare(
+            'DELETE FROM posts WHERE id = :id'
+        );
+        $stmt->execute(['id' => $id]);
+    }
     public function upsert(
         int|null $id,
         string $title,

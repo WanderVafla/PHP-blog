@@ -37,6 +37,8 @@ switch ($request) {
             header("Location: /");
             exit();
         }
+    case "/removePost":
+        $controller->remove();
         break;
 }
 if (!empty($_SESSION["last_action"])) {
