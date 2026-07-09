@@ -139,7 +139,6 @@ class PostController
         if ($isCreatedByCurrentUser) {
             new Posts()->delete($id);
         }
-        // TODO: Understand why this not work!
         header("Location: /");
     }
 }
