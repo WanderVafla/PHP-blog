@@ -30,7 +30,7 @@ class UserController
     public function profil()
     {
         $user_id = Session::getUserId();
-        if (isset($user_id)) {
+        if (!isset($user_id)) {
             Session::addAction(FLASH_MESSAGE_ERROR_PROFIL);
             header("Location: /");
             exit;
