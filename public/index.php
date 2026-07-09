@@ -37,6 +37,9 @@ switch ($request) {
     case "/removePost":
         $controller->remove();
         break;
+    case "/profil":
+        $controllerUsers->profil();
+        break;
 }
 if (!empty($_SESSION["last_action"])) {
     require "../src/Views/components/message.php";

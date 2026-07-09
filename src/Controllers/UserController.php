@@ -27,6 +27,16 @@ class UserController
             header("Location: /");
             exit();
     }
+    public function profil()
+    {
+        $user_id = Session::getUserId();
+        if (isset($user_id)) {
+            Session::addAction(FLASH_MESSAGE_ERROR_PROFIL);
+            header("Location: /");
+            exit;
+        }
+        require self::$viewPageDir . 'Profil.php';
+    }
     public function auth(string $authAction)
     {
         $errors = [];
