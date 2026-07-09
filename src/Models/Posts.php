@@ -9,16 +9,24 @@ use Wandervafla\PhpBlog\Core\Database;
 class Posts
 {
     private PDO $pdo;
+    private static $allowedColumns = ['id', 'title', 'image', 'content', 'created_at', 'user_id'];
 
     public function __construct()
     {
         $this->pdo = Database::Connection();
     }
-    public function fetchAll(): array
+    public function fetchAll($column = null, $value = null): array
     {
-        return $this->pdo
-            ->query("SELECT * FROM posts")
-            ->fetchAll(PDO::FETCH_ASSOC);
+        $query = "SELECT * FROM posts";
+        $params = [];
+        if (in_array($column, self::$allowedColumns) && isset($value)) {
+            $query .= " WHERE {$column} = :value";
+            $params['value'] = $value;
+        }
+
+        $stmt = $this->pdo->prepare($query);
+        $stmt->execute($params);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
     public function fetchOne(int $id): array|null
     {
