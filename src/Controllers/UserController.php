@@ -6,6 +6,7 @@ use Wandervafla\PhpBlog\Actions\Security\ValidateCsrfAction;
 use Wandervafla\PhpBlog\Core\DisplayErrors;
 use Wandervafla\PhpBlog\Filteres\XssFilter;
 use Wandervafla\PhpBlog\Models\Users;
+use Wandervafla\PhpBlog\Core\Session;
 
 class UserController
 {
@@ -19,7 +20,15 @@ class UserController
         $this->users = new Users();
         $this->xssFilter = new XssFilter();
     }
-    // TODO: Faire test to login and singup pages!
+    public function singout()
+    {
+        if ($_SERVER["REQUEST_METHOD"] === "POST") {
+            Session::destroySession();
+            $_SESSION["last_action"] = FLASH_MESSAGE_SINOUT;
+            header("Location: /");
+            exit();
+        }
+    }
     public function auth(string $authAction)
     {
         $errors = [];

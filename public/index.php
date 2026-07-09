@@ -31,12 +31,8 @@ switch ($request) {
         $controller->open();
         break;
     case "/logout":
-        if ($_SERVER["REQUEST_METHOD"] === "POST") {
-            Session::destroySession();
-            $_SESSION["last_action"] = FLASH_MESSAGE_SINOUT;
-            header("Location: /");
-            exit();
-        }
+        $controllerUsers->singout();
+        break;
     case "/removePost":
         $controller->remove();
         break;
