@@ -9,9 +9,14 @@ use Wandervafla\PhpBlog\Core\Session;
             <button type="button"><a href="/login">Login</a></button>
             <button type="button"><a href="/singup">Reg in</a></button>
         <?php else: ?>
-            <form action="/logout" method="post">
-                <button type="submit">Log out</button>
-            </form>
+            <div class="size-10 bg-blue-500 rounded-4xl text-center justify-center items-center hover:[&>div]:flex" >
+                U
+                <div class="hidden flex-col">
+                    <button type="button"><a>Profil</a></button>
+                    <button type="button"><a href="/logout">Log out</a></button>
+                </div>
+            </div>
         <?php endif; ?>
     </span>
+    
 </nav>

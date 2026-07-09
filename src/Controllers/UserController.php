@@ -22,12 +22,10 @@ class UserController
     }
     public function singout()
     {
-        if ($_SERVER["REQUEST_METHOD"] === "POST") {
             Session::destroySession();
             $_SESSION["last_action"] = FLASH_MESSAGE_SINOUT;
             header("Location: /");
             exit();
-        }
     }
     public function auth(string $authAction)
     {
