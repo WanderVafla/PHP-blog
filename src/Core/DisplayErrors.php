@@ -19,9 +19,7 @@ class DisplayErrors
     }
     public static function checkLogin(array &$errors, ?array &$userData)
     {
-        if (empty($userData)) {
-            $errors["form"] = MESSAGE_LOGIN_FAILED;
-        }
+        $errors["form"] = MESSAGE_LOGIN_FAILED;
     }
     public static function checkSingup(
         array &$errors,

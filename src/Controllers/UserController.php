@@ -60,10 +60,11 @@ class UserController
             );
 
             if ($authAction === "login") {
-                $userData = $this->users->select(email: $email);
-                DisplayErrors::checkLogin($errors, userData: $userData);
                 if (empty($errors)) {
-                    if (password_verify($password, $userData["password"])) {
+                    $userData = $this->users->select(email: $email);
+                    
+                    $validPassword = password_verify($password, $userData["password"]);
+                    if (!empty($userData) && $validPassword) {
                         $_SESSION["user_id"] = $userData["id"];
                         $_SESSION["username"] = $userData["name"];
                         $_SESSION['email'] = $userData['email'];
