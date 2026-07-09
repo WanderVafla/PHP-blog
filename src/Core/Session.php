@@ -6,6 +6,7 @@ class Session
     private static $username = "username";
     private static $user_id = "user_id";
     private static $user_role = "role";
+    private static $last_action = 'last_action';
 
     public static function getUsername(): ?string
     {
@@ -27,6 +28,10 @@ class Session
         if (empty($_SESSION["csrf_token"])) {
             $_SESSION["csrf_token"] = bin2hex(random_bytes(32));
         }
+    }
+    public static function addAction(string $action)
+    {
+        $_SESSION[self::$last_action] = $action;
     }
     public static function destroySession()
     {

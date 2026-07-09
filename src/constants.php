@@ -21,3 +21,5 @@ define('FLASH_MESSAGE_SINGUP', 'Your account has been successfully created! You 
 define('FLASH_MESSAGE_SINOUT', 'You have been successfully logged out.');
 define('FLASH_MESSAGE_CREATED', 'Your new post has been successfully published!');
 define('FLASH_MESSAGE_EDITED', 'Your post changes have been successfully saved');
+define('FLASH_MESSAGE_REMOVED', 'Success! Post has been deleted!');
+define('FLASH_MESSAGE_ERROR_PROFIL', 'Sorry! Your not logged or user not exist!');

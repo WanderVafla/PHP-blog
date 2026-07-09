@@ -23,7 +23,7 @@ class UserController
     public function singout()
     {
             Session::destroySession();
-            $_SESSION["last_action"] = FLASH_MESSAGE_SINOUT;
+            Session::addAction(FLASH_MESSAGE_SINOUT);
             header("Location: /");
             exit();
     }
@@ -83,7 +83,7 @@ class UserController
                             email: $email,
                             password: password_hash($password, PASSWORD_BCRYPT),
                         );
-                        $_SESSION["last_action"] = FLASH_MESSAGE_SINGUP;
+                        Session::addAction(FLASH_MESSAGE_SINGUP);
                         header("Location: /login");
                         exit();
                     }

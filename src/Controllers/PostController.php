@@ -97,10 +97,10 @@ class PostController
                     user_id: $user_id,
                 );
                 if (isset($id)) {
-                    $_SESSION['last_action'] = FLASH_MESSAGE_EDITED;
+                    Session::addAction(FLASH_MESSAGE_EDITED);
                     header("Location: /post?id=$id");
                 } else {
-                    $_SESSION['last_action'] = FLASH_MESSAGE_CREATED;
+                    Session::addAction(FLASH_MESSAGE_CREATED);
                     header("Location: /post?id=$insertedId");
                 }
                 exit();
