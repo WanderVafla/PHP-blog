@@ -134,6 +134,7 @@ class PostController
     {
         $id = $_GET['id'];
         $data = new Posts()->fetchOne(id: $id);
+        Session::addAction(FLASH_MESSAGE_REMOVED);
         (bool) $isCreatedByCurrentUser = Session::isByCurrentUser($data['user_id']);
         if ($isCreatedByCurrentUser) {
             new Posts()->delete($id);
