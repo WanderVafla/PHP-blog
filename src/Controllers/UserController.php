@@ -7,6 +7,7 @@ use Wandervafla\PhpBlog\Core\DisplayErrors;
 use Wandervafla\PhpBlog\Filteres\XssFilter;
 use Wandervafla\PhpBlog\Models\Users;
 use Wandervafla\PhpBlog\Core\Session;
+use Wandervafla\PhpBlog\Models\Posts;
 
 class UserController
 {
@@ -35,7 +36,12 @@ class UserController
             header("Location: /");
             exit;
         }
-        require self::$viewPageDir . 'Profil.php';
+        $username = Session::getUsername();
+        $email = Session::getEmail();
+        
+        $posts = new Posts()->fetchAll('user_id', Session::getUserId());
+        
+        require self::$viewPageDir . "Profil.php";
     }
     public function auth(string $authAction)
     {
@@ -60,6 +66,7 @@ class UserController
                     if (password_verify($password, $userData["password"])) {
                         $_SESSION["user_id"] = $userData["id"];
                         $_SESSION["username"] = $userData["name"];
+                        $_SESSION['email'] = $userData['email'];
                         $_SESSION["role"] = $userData['role'];
                         $_SESSION["last_action"] = FLASH_MESSAGE_LOGGED;
                         header("Location: /");

@@ -5,6 +5,7 @@ class Session
 {
     private static $username = "username";
     private static $user_id = "user_id";
+    private static $user_email = 'email';
     private static $user_role = "role";
     private static $last_action = 'last_action';
 
@@ -19,6 +20,10 @@ class Session
     public static function getUserRole(): ?string
     {
         return $_SESSION[self::$user_role];
+    }
+    public static function getEmail(): ?string
+    {
+        return $_SESSION[self::$user_email];
     }
     public static function initSession()
     {
