@@ -53,7 +53,7 @@ class PostController
             $titleStrlenFilter = new MaxStrlenFilter();
             $uploadImageAction = new UploadImageAction();
 
-            $new_title = $xssFilter($_POST["title"]);
+            $new_title = $_POST["title"];
 
             (string) ($created_at = Session::getUsername());
             (int) ($user_id = Session::getUserId());
@@ -64,7 +64,7 @@ class PostController
                 $errors["title"] = "Title should be less that 20 characters";
             }
 
-            $new_content = $xssFilter($_POST["content"]);
+            $new_content = $_POST["content"];
             if (empty($new_content)) {
                 $errors["content"] = "Title is reuquired";
             }
