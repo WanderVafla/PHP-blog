@@ -30,6 +30,15 @@ class UserController
     }
     public function profil()
     {
+        $allowedChangeParams = ['username', 'email', 'password'];
+        $changeData = $_GET['change'];
+        $dialog = 'open';
+        if (in_array($changeData, $allowedChangeParams)) {
+            $dialog = true;
+            require "../src/Views/components/modal.php";
+        }
+            echo $dialog;
+        
         $user_id = Session::getUserId();
         if (!isset($user_id)) {
             Session::addAction(FLASH_MESSAGE_ERROR_PROFIL);
