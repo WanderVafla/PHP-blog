@@ -8,6 +8,7 @@ use Wandervafla\PhpBlog\Filteres\XssFilter;
 use Wandervafla\PhpBlog\Models\Users;
 use Wandervafla\PhpBlog\Core\Session;
 use Wandervafla\PhpBlog\Models\Posts;
+use Wandervafla\PhpBlog\Actions\Security\EncryptPassword;
 
 class UserController
 {
@@ -125,7 +126,7 @@ class UserController
                         $this->users->insert(
                             name: $name,
                             email: $email,
-                            password: password_hash($password, PASSWORD_BCRYPT),
+                            password: EncryptPassword::encrypt($password),
                         );
                         Session::addAction(FLASH_MESSAGE_SINGUP);
                         header("Location: /login");
