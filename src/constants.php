@@ -23,3 +23,9 @@ define('FLASH_MESSAGE_CREATED', 'Your new post has been successfully published!'
 define('FLASH_MESSAGE_EDITED', 'Your post changes have been successfully saved');
 define('FLASH_MESSAGE_REMOVED', 'Success! Post has been deleted!');
 define('FLASH_MESSAGE_ERROR_PROFIL', 'Sorry! Your not logged or user not exist!');
+
+
+define('FLASH_MESSAGE_CHANGED', 'is been changed');
+define('FLASH_MESSAGE_CHANGED_FATAIL', 'not is been changed');
+
+define('CSRF_TOKEN', 'csrf_token');
