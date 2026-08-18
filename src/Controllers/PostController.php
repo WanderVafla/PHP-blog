@@ -5,7 +5,6 @@ use Wandervafla\PhpBlog\Actions\Security\ValidateCsrfAction;
 use Wandervafla\PhpBlog\Models\Posts;
 use Wandervafla\PhpBlog\Actions\UploadImageAction;
 use Wandervafla\PhpBlog\Filteres\MaxStrlenFilter;
-use Wandervafla\PhpBlog\Filteres\XssFilter;
 use Wandervafla\PhpBlog\Core\Session;
 
 use Exception;
@@ -24,7 +23,6 @@ class PostController
         Session::notLoggedRedirect();
 
         $postModel = new Posts();
-        $xssFilter = new XssFilter();
 
         $errors = [];
 

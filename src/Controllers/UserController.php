@@ -4,7 +4,6 @@ namespace Wandervafla\PhpBlog\Controllers;
 use PDOException;
 use Wandervafla\PhpBlog\Actions\Security\ValidateCsrfAction;
 use Wandervafla\PhpBlog\Core\DisplayErrors;
-use Wandervafla\PhpBlog\Filteres\XssFilter;
 use Wandervafla\PhpBlog\Models\Users;
 use Wandervafla\PhpBlog\Core\Session;
 use Wandervafla\PhpBlog\Models\Posts;
@@ -15,12 +14,10 @@ class UserController
     private static $viewPageDir = __DIR__ . "/../Views/Pages/";
 
     private Users $users;
-    private XssFilter $xssFilter;
 
     public function __construct()
     {
         $this->users = new Users();
-        $this->xssFilter = new XssFilter();
     }
     public function singout()
     {
@@ -79,11 +76,12 @@ class UserController
         }
         $username = Session::getUsername();
         $email = Session::getEmail();
-        
+
         $posts = new Posts()->fetchAll('user_id', Session::getUserId());
-        
+
         require self::$viewPageDir . "Profil.php";
     }
+    // TODO: Chnage name of function
     public function auth(string $authAction)
     {
         $errors = [];
@@ -91,7 +89,7 @@ class UserController
         if ($_SERVER["REQUEST_METHOD"] === "POST") {
             ValidateCsrfAction::validate();
 
-            $email = ($this->xssFilter)($_POST["email"]);
+            $email = htmlspecialchars($_POST["email"]);
             $password = trim($_POST["password"]);
 
             DisplayErrors::emptyPasswordEmail(
@@ -103,7 +101,7 @@ class UserController
             if ($authAction === "login") {
                 if (empty($errors)) {
                     $userData = $this->users->select(email: $email);
-                    
+
                     $validPassword = password_verify($password, $userData["password"]);
                     if (!empty($userData) && $validPassword) {
                         $_SESSION["user_id"] = $userData["id"];
@@ -123,7 +121,7 @@ class UserController
             }
 
             if ($authAction === "singup") {
-                $name = ($this->xssFilter)($_POST["username"]);
+                $name = htmlspecialchars($_POST["username"]);
                 $password = trim($_POST["password"]);
                 $confirmPassword = trim($_POST["confirm-password"]);
 
