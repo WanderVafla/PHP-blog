@@ -31,12 +31,26 @@ class UserController
     }
     public function profil()
     {
-        $allowedChangeParams = ['username', 'email', 'password'];
-        $changeData = $_GET['change'];
-        $dialog = 'open';
-        if (in_array($changeData, $allowedChangeParams)) {
-            $dialog = true;
-            require "../src/Views/components/modal.php";
+        // WARNING: array mush always respect order ['name', 'email', 'password']
+        $allowedChangeParams = ['name', 'email', 'password'];
+
+        if ($_SERVER["REQUEST_METHOD"] === "POST") {
+            ValidateCsrfAction::validate();
+            $id = $_SESSION['user_id'];
+            // TODO: change exeption
+            $column = $_POST['profilAction'] ?? "";
+            $value = $_POST['value'] ?? "";
+
+            if (in_array($column, $allowedChangeParams)) {
+                if ($column === $allowedChangeParams[3]) {
+                    $password = $_POST("");
+                    $value = EncryptPassword::encrypt($value);
+                    $this->users->update(id: $id, column: $column, value: $value);
+                    Session::addAction(sprintf("%s %s", ucfirst($column), FLASH_MESSAGE_CHANGED ));
+                }
+                $this->users->update(id: $id, column: $column, value: $value);
+                Session::addAction(sprintf("%s %s", ucfirst($column), FLASH_MESSAGE_CHANGED ));
+            }
         }
 
         $changeData = $_GET['change'] ?? "";
