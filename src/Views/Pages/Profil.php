@@ -11,7 +11,7 @@ require_once "../src/Views/components/post.php";
         <main class="flex flex-col px-10 py-5">
             <p class="flex w-5 justify-between">
                 <?= htmlspecialchars($username ?? "Username Not Found") ?>
-                <a href="/profil?change=username"><button>Chenge</button></a>
+                <a href="/profil?change=name"><button>Chenge</button></a>
             </p>
             <p class="flex w-5 justify-between">
                 <?= htmlspecialchars($email ?? "Email Not Found") ?>

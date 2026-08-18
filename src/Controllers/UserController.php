@@ -37,8 +37,25 @@ class UserController
             $dialog = true;
             require "../src/Views/components/modal.php";
         }
-            echo $dialog;
-        
+
+        $changeData = $_GET['change'] ?? "";
+        if (in_array($changeData, $allowedChangeParams)) {
+            require "../src/Views/components/modal.php";
+            $array = [
+                
+            ];
+            if ($changeData == 'password') {
+                modal([
+                    ["type" => "password", "name" => "new_password", "placeholder" => "New {$changeData}"],
+                    ["type" => "password", "name" => "Repeat_password", "placeholder" => "Repeat {$changeData}"],
+                ], true, $changeData);
+                return;
+            }
+            modal([
+                ["type" => "text", "name" => "value", "placeholder" => "New {$changeData}"],
+            ], true, $changeData);
+        }
+
         $user_id = Session::getUserId();
         if (!isset($user_id)) {
             Session::addAction(FLASH_MESSAGE_ERROR_PROFIL);
