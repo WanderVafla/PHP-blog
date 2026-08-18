@@ -121,6 +121,7 @@ class UserController
             }
 
             if ($authAction === "singup") {
+                // TODO: fix supoort special character like _
                 $name = htmlspecialchars($_POST["username"]);
                 $password = trim($_POST["password"]);
                 $confirmPassword = trim($_POST["confirm-password"]);
