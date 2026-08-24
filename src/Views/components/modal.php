@@ -21,8 +21,7 @@ require_once "../src/Views/components/input.php";
       <?php if ($action): ?>
         <input type="hidden" name="profilAction" value=<?= $action ?> >
       <?php endif; ?>
-        <?php echo $action ?>
-        
+
     <div >
         <button type="submit">
             Save

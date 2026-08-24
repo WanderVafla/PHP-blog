@@ -53,9 +53,6 @@ class UserController
         $changeData = $_GET['change'] ?? "";
         if (in_array($changeData, $allowedChangeParams)) {
             require "../src/Views/components/modal.php";
-            $array = [
-                
-            ];
             if ($changeData == 'password') {
                 modal([
                     ["type" => "password", "name" => "new_password", "placeholder" => "New {$changeData}"],
@@ -77,8 +74,8 @@ class UserController
         $username = Session::getUsername();
         $email = Session::getEmail();
 
-        $posts = new Posts()->fetchAll('user_id', Session::getUserId());
-
+        $posts = new Posts()->fetchAll('user_id', $user_id);
+        
         require self::$viewPageDir . "Profil.php";
     }
     // TODO: Chnage name of function
