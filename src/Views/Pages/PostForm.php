@@ -17,19 +17,23 @@ require_once "../src/Views/components/head.php";
                 <mark>New Post</mark>
             </h1>
             <form action="" method="post" enctype="multipart/form-data" class="flex flex-col gap-5 items-end">
-                <span class="errors"><?= htmlspecialchars($errors["title"]) ?></span>
                 <?php input_with_border(
-                    type: "text",
-                    name: "title",
-                    placeholder: "Title",
+                    [
+                    'type' => "text",
+                    'name' => "title",
+                    'placeholder' => "Title",
+                    ], label: "Title", error: $errors["title"] ?? null
                 ); ?>
-                <span class="error">* <?= htmlspecialchars($errors["content"]) ?></span>
-                <?php textarea(name: "content", placeholder: "Description"); ?>
-                <span class="error">* <?= htmlspecialchars($errors["image"]) ?></span>
+                <?php textarea([
+                    "name" => "content", 
+                    "placeholder" => "Description"
+                ], error: $errors["content"]  ?? null); ?>
                 <?php input_with_border(
-                    type: "file",
-                    name: "image",
-                    placeholder: "Image",
+                    [
+                    "type" => "file",
+                    "name" => "image",
+                    "placeholder" => "Image",
+                    ], label: "Upload Image", error: $errors["image"] ?? null
                 ); ?>
                 <input type="hidden" name="csrf_token" value="<?= $_SESSION[
                     "csrf_token"

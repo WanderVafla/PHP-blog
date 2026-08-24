@@ -11,7 +11,7 @@ require_once "../src/Views/components/input.php";
 
       
       <?php foreach ($inputs as $input): ?>
-        <?php input_with_border(type: $input["type"] ?? "", placeholder: $input["placeholder"] ?? "", name: $input["name"] ?? "", value: $input["value"] ?? "", id: $input["id"] ?? "") ?>
+        <?php input_with_border(params: $input, label: $input['placeholder']) ?>
       <?php endforeach; ?>
 
       <?php if ($csrf_token == true): ?>

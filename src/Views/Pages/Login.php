@@ -10,23 +10,20 @@ require_once "../src/Views/components/head.php";
         <h1>Sign in to your account</h1>
         <main class="main-form">
             <form method="POST" class="flex flex-col w-110 gap-5">
-                <span class="error">
-                    <?= htmlspecialchars($errors['form'] ?? "") ?>
-                </span>
-                <label for="sing-in-email">Email address</label>
-                <span class="error"><?= htmlspecialchars($errors['email'] ?? "") ?></span>
+                <span class="error"><?= htmlspecialchars($errors['form'] ?? "") ?></span>
                 <?php input_with_border(
-                    type: "email",
-                    name: "email",
-                    placeholder: "email",
+                    [
+                    "type" => "email",
+                    "name" => "email",
+                    "placeholder" => "email",
+                    ], label: "Email address", error: $errors['email'] ?? null
                 ); ?>
-
-                <label for="sing-in-password">Password</label>
-                <span class="error"><?= htmlspecialchars($errors['password'] ?? "") ?></span>
                 <?php input_with_border(
-                    type: "password",
-                    name: "password",
-                    placeholder: "Password",
+                    [
+                    "type" => "password",
+                    "name" => "password",
+                    "placeholder" => "Password",
+                    ], label: "Password", error: $errors['password'] ?? null
                 ); ?>
                 <input type="hidden" name="authAction" value="login">
                 <input type="hidden" name="csrf_token" value="<?= $_SESSION[
