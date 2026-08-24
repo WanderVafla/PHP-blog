@@ -17,7 +17,7 @@ class DisplayErrors
             $errors["password"] = MESSAGE_PASSWORD_REQUIRE;
         }
     }
-    public static function checkLogin(array &$errors, ?array &$userData)
+    public static function checkLogin(array &$errors, ?array &$userData = null)
     {
         $errors["form"] = MESSAGE_LOGIN_FAILED;
     }

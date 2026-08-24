@@ -1,7 +1,7 @@
 <?php
 require_once "../src/Views/components/input.php";
 ?>
-<?php function modal(array $inputs, bool $csrf_token = false, string $action ) { ?>
+<?php function modal(array $inputs, ?bool $csrf_token = false, string $action ) { ?>
 <!-- Outer Wrapper: Fills screen, centers the modal box, stays on top -->
 <div class="fixed inset-0 z-50 flex items-center justify-center p-4">
   <!-- Backdrop: Dark overlay behind the modal -->
