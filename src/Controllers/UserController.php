@@ -58,11 +58,12 @@ class UserController
                     ["type" => "password", "name" => "new_password", "placeholder" => "New {$changeData}"],
                     ["type" => "password", "name" => "Repeat_password", "placeholder" => "Repeat {$changeData}"],
                 ], true, $changeData);
-                return;
-            }
+            } else {
+
             modal([
                 ["type" => "text", "name" => "value", "placeholder" => "New {$changeData}"],
             ], true, $changeData);
+            }
         }
 
         $user_id = Session::getUserId();
