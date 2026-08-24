@@ -11,19 +11,19 @@ class Session
 
     public static function getUsername(): ?string
     {
-        return $_SESSION[self::$username];
+        return $_SESSION[self::$username] ?? null;
     }
     public static function getUserId(): ?int
     {
-        return $_SESSION[self::$user_id];
+        return $_SESSION[self::$user_id] ?? null;
     }
     public static function getUserRole(): ?string
     {
-        return $_SESSION[self::$user_role];
+        return $_SESSION[self::$user_role] ?? null;
     }
     public static function getEmail(): ?string
     {
-        return $_SESSION[self::$user_email];
+        return $_SESSION[self::$user_email] ?? null;
     }
     public static function initSession()
     {
@@ -46,10 +46,10 @@ class Session
     }
     public static function isLoggedIn(): bool
     {
-        $username = $_SESSION[self::$username];
-        $user_id = $_SESSION[self::$user_id];
+        $username = self::getUsername();
+        $user_id = self::getUserId();
 
-        if (isset($user_id) && isset($username)) {
+        if (isset($user_id) || !empty($user_id) && isset($username) || !empty($username)) {
             return true;
         }
         return false;
