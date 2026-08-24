@@ -98,9 +98,13 @@ class UserController
 
             if ($authAction === "login") {
                 if (empty($errors)) {
+                    try {
+                    $validPassword = null;
                     $userData = $this->users->select(email: $email);
 
-                    $validPassword = password_verify($password, $userData["password"]);
+                    if ($userData) {
+                        $validPassword = password_verify($password, $userData["password"]);
+                    }
                     if (!empty($userData) && $validPassword) {
                         $_SESSION["user_id"] = $userData["id"];
                         $_SESSION["username"] = $userData["name"];
@@ -115,6 +119,9 @@ class UserController
                             userData: $userData,
                         );
                     }
+                        } catch (PDOException $e) {
+                            $errorMessage = $e->getMessage();
+                        }
                 }
             }
 
