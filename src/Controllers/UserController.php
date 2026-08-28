@@ -28,6 +28,10 @@ class UserController
     }
     public function profil()
     {
+        // TODO: replace on function
+        if (!Session::getUserId()) {
+            header("Location: /");
+        }
         // WARNING: array mush always respect order ['name', 'email', 'password']
         $allowedChangeParams = ['name', 'email', 'password'];
 
