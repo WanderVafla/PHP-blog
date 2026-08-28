@@ -205,9 +205,9 @@ class UserController
                             "placeholder" => "Repeat {$changeData}",
                         ],
                     ],
-                    true,
                     $changeData,
                     $errors,
+                    true,
                 );
             } else {
                 modal(
@@ -219,9 +219,9 @@ class UserController
                         "name" => "value",
                         "placeholder" => "New {$changeData}",
                     ]],
-                    true,
                     $changeData,
                     $errors,
+                    true,
                 );
             }
         }

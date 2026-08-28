@@ -14,7 +14,7 @@ require_once "../src/Views/components/input.php";
  * @param bool|null $csrf_token
  * @param string $action
  */
-function modal(array $inputs, ?bool $csrf_token = false, string $action, array &$errors) { ?>
+function modal(array $inputs, string $action, array &$errors, ?bool $csrf_token = false) { ?>
 <!-- Outer Wrapper: Fills screen, centers the modal box, stays on top -->
 <div class="fixed inset-0 z-50 flex items-center justify-center p-4">
   <!-- Backdrop: Dark overlay behind the modal -->
