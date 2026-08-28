@@ -105,6 +105,9 @@ class UserController
                     }
 
                     if (!empty(trim($passwordValue))) {
+                        $email = Session::getEmail();
+                        $userData = $this->users->select(email: $email);
+                        
                         $validPassword = password_verify(
                             $passwordValue,
                             $userData["password"],
