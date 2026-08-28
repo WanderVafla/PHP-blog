@@ -87,6 +87,8 @@ class UserController
                             "name" => $passwordNames['NewPassword'],
                             "value" => "{$newPasswordValue}",
                         ]);
+                    }
+                    if (!empty(trim($newPasswordValue)) && !empty(trim($repeatPasswordValue))) {
                         $diaplayMessage->checkConfirmPassword($errors, [
                             [
                                 "name" => $passwordNames['NewPassword'],
