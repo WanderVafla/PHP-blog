@@ -24,11 +24,20 @@
           echo "Initialize a config file (tailwind.config.js)"
           tailwindcss init
           
+          if ! pgrep -x "zen" > /dev/null; then
+              zen &
+          fi
+
+          echo "Start IDE"
+          zeditor .
+          
           echo "Watch for changes and build your CSS"
-          tailwindcss -i ./src/input.css -o ./public/output.css --watch &
+          tailwindcss -i ./src/input.css -o ./public/output.css --watch >> /dev/null & 
+                    
+          sleep 1
           
           echo "PHP server is started"
-          # php -S localhost:8080 -t public
+          kitty --hold sh -c "php -S localhost:8000 -t public" &
           
         '';
       };
