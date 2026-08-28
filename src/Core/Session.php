@@ -52,10 +52,9 @@ class Session
     }
     public static function isLoggedIn(): bool
     {
-        $username = self::getUsername();
         $user_id = self::getUserId();
 
-        if (isset($user_id) || !empty($user_id) && isset($username) || !empty($username)) {
+        if (isset($user_id) || !empty($user_id)) {
             return true;
         }
         return false;
