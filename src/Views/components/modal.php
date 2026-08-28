@@ -24,7 +24,7 @@ function modal(array $inputs, ?bool $csrf_token = false, string $action, array &
 
       
       <?php foreach ($inputs as $input): ?>
-        <?php input_with_border(params: $input, label: $input['placeholder']) ?>
+        <?php input_with_border(params: $input, error: $errors[$input["name"]] ?? null, label: $input['placeholder']) ?>
       <?php endforeach; ?>
 
       <?php if ($csrf_token == true): ?>

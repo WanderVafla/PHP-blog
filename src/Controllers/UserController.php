@@ -31,38 +31,181 @@ class UserController
         // WARNING: array mush always respect order ['name', 'email', 'password']
         $allowedChangeParams = ['name', 'email', 'password'];
 
+        $errors = [];
+        if (!empty($errors)) {
+            $errors = [];
+        }
         if ($_SERVER["REQUEST_METHOD"] === "POST") {
             ValidateCsrfAction::validate();
-            $id = $_SESSION['user_id'];
+            $diaplayMessage = new DisplayErrors();
+
+            $id = Session::getUserId();
             // TODO: change exeption
             $column = $_POST['profilAction'] ?? "";
             $value = $_POST['value'] ?? "";
 
             if (in_array($column, $allowedChangeParams)) {
-                if ($column === $allowedChangeParams[3]) {
-                    $password = $_POST("");
-                    $value = EncryptPassword::encrypt($value);
-                    $this->users->update(id: $id, column: $column, value: $value);
-                    Session::addAction(sprintf("%s %s", ucfirst($column), FLASH_MESSAGE_CHANGED ));
+                if ($column === $allowedChangeParams[2]) {
+                    // TODO: Refactoring DRY, KISS
+                    // TODO: A lot of same arrays
+                    // TODO: replace magic string on variables, like "old_password"
+                    $password = trim($_POST["old_password"]) ?? null;
+                    $newPassword = $_POST["new_password"] ?? null;
+                    $repeatPassword = $_POST["repeat_password"] ?? null;
+
+                    $diaplayMessage->checkEmptyInputs(
+                        errors: $errors,
+                        inputs: [
+                            [
+                                "name" => "old_password",
+                                "value" => "{$password}",
+                            ],
+                            [
+                                "name" => "new_password",
+                                "value" => "{$password}",
+                            ],
+                            [
+                                "name" => "repeat_password",
+                                "value" => "{$password}",
+                            ],
+                        ],
+                    );
+
+                    $email = Session::getEmail();
+                    $userData = $this->users->select(email: $email);
+                    $validPassword = password_verify(
+                        $password,
+                        $userData["password"],
+                    );
+
+                    if (empty($errors)) {
+                        $diaplayMessage->checkForcePassword($errors, [
+                            "name" => "new_password",
+                            "value" => "{$newPassword}",
+                        ]);
+                        $diaplayMessage->checkConfirmPassword($errors, [
+                            [
+                                "name" => "new_password",
+                                "value" => "{$newPassword}",
+                            ],
+                            [
+                                "name" => "repeat_password",
+                                "value" => "{$repeatPassword}",
+                            ],
+                        ]);
+                    }
+
+                    if (!$validPassword && empty($errors)) {
+                        $diaplayMessage->diaplay(
+                            $errors,
+                            inputNmae: "old_password",
+                            nameError: MESSAGE_PASSWORD_INCORRECT,
+                        );
+                    }
+
+                    if (empty($errors)) {
+                        $value = EncryptPassword::encrypt($newPassword);
+                        $this->users->update(
+                            id: $id,
+                            column: $column,
+                            value: $value,
+                        );
+                        $updatedUserData = $this->users->selectById($id);
+                        Session::updateCurrentUserData($updatedUserData);
+                        Session::addAction(
+                            sprintf(
+                                "%s %s",
+                                ucfirst($column),
+                                FLASH_MESSAGE_CHANGED,
+                            ),
+                        );
+                        header("Location: /profil");
+                    }
                 }
-                $this->users->update(id: $id, column: $column, value: $value);
-                Session::addAction(sprintf("%s %s", ucfirst($column), FLASH_MESSAGE_CHANGED ));
+
+                (array) $currentInput = ["name" => 'value', "value" => $value];
+
+                
+                
+                $diaplayMessage->checkEmptyInputs(
+                    errors: $errors,
+                    inputs: $currentInput
+                );
+                if ($column === $allowedChangeParams[1]) {
+                    $diaplayMessage->checkEmail($errors, $currentInput);
+                }
+                
+                if (empty($errors)) {
+                    try {
+                        $this->users->update(
+                            id: $id,
+                            column: $column,
+                            value: $value,
+                        );
+                        $updatedUserData = $this->users->selectById($id);
+                        Session::updateCurrentUserData($updatedUserData);
+                        Session::addAction(
+                            sprintf(
+                                "%s %s",
+                                ucfirst($column),
+                                FLASH_MESSAGE_CHANGED,
+                            ),
+                        );
+                        header("Location: /profil");
+                    } catch (PDOException $e) {
+                        $errorMessage = $e->getMessage();
+                        echo $column;
+                        if (str_contains($errorMessage, "users.name")) {
+                            $errors["value"] = MESSAGE_USERNAME_EXIST;
+                        }
+                        if (str_contains($errorMessage, "users.email")) {
+                            $errors["value"] = MESSAGE_EMAIL_EXIST;
+                        }
+                    }
+                }
             }
         }
 
         $changeData = $_GET['change'] ?? "";
         if (in_array($changeData, $allowedChangeParams)) {
             require "../src/Views/components/modal.php";
-            if ($changeData == 'password') {
-                modal([
-                    ["type" => "password", "name" => "new_password", "placeholder" => "New {$changeData}"],
-                    ["type" => "password", "name" => "Repeat_password", "placeholder" => "Repeat {$changeData}"],
-                ], true, $changeData);
+            if ($changeData == "password") {
+                modal(
+                    [
+                        [
+                            "type" => "password",
+                            "name" => "old_password",
+                            "placeholder" => "Old {$changeData}",
+                        ],
+                        [
+                            "type" => "password",
+                            "name" => "new_password",
+                            "placeholder" => "New {$changeData}",
+                        ],
+                        [
+                            "type" => "password",
+                            "name" => "repeat_password",
+                            "placeholder" => "Repeat {$changeData}",
+                        ],
+                    ],
+                    true,
+                    $changeData,
+                    $errors,
+                );
             } else {
-
-            modal([
-                ["type" => "text", "name" => "value", "placeholder" => "New {$changeData}"],
-            ], true, $changeData);
+                modal(
+                    [[
+                        "type" => ($type =
+                            $changeData === $allowedChangeParams[1]
+                            ? "email"
+                            : "text"),
+                        "name" => "value",
+                        "placeholder" => "New {$changeData}",
+                    ]],
+                    true,
+                    $changeData,
+                    $errors,
+                );
             }
         }
 
@@ -70,7 +213,7 @@ class UserController
         if (!isset($user_id)) {
             Session::addAction(FLASH_MESSAGE_ERROR_PROFIL);
             header("Location: /");
-            exit;
+            exit();
         }
         $username = Session::getUsername();
         $email = Session::getEmail();
