@@ -54,4 +54,17 @@ class Users
         }
         return $data;
     }
+    public function selectById(int $id)
+    {
+        $stmt = $this->pdo->prepare("SELECT * FROM users WHERE id = :id");
+        $stmt->execute([
+            "id" => $id,
+        ]);
+
+        $data = $stmt->fetch();
+        if (!$data) {
+            return null;
+        }
+        return $data;
+    }
 }

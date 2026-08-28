@@ -25,6 +25,12 @@ class Session
     {
         return $_SESSION[self::$user_email] ?? null;
     }
+    public static function updateCurrentUserData(array $userData)
+    {
+        $_SESSION["username"] = $userData["name"];
+        $_SESSION['email'] = $userData['email'];
+        $_SESSION["role"] = $userData['role'];
+    }
     public static function initSession()
     {
         if (session_status() === PHP_SESSION_NONE) {

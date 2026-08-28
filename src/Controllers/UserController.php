@@ -102,26 +102,31 @@ class UserController
                     $validPassword = null;
                     $userData = $this->users->select(email: $email);
 
-                    if ($userData) {
-                        $validPassword = password_verify($password, $userData["password"]);
-                    }
-                    if (!empty($userData) && $validPassword) {
-                        $_SESSION["user_id"] = $userData["id"];
-                        $_SESSION["username"] = $userData["name"];
-                        $_SESSION['email'] = $userData['email'];
-                        $_SESSION["role"] = $userData['role'];
-                        $_SESSION["last_action"] = FLASH_MESSAGE_LOGGED;
-                        header("Location: /");
-                        exit();
-                    } else {
-                        DisplayErrors::checkLogin(
-                            errors: $errors,
-                            userData: $userData,
-                        );
-                    }
-                        } catch (PDOException $e) {
-                            $errorMessage = $e->getMessage();
+                        if ($userData) {
+                            $validPassword = password_verify(
+                                $password,
+                                $userData["password"],
+                            );
                         }
+                        if (!empty($userData) && $validPassword) {
+                            $_SESSION["user_id"] = $userId;
+                            $updatedUserData = $this->users->selectById(
+                                $userId,
+                            );
+                            Session::updateCurrentUserData($updatedUserData);
+
+                            Session::addAction(FLASH_MESSAGE_LOGGED);
+                            header("Location: /");
+                            exit();
+                        } else {
+                            DisplayErrors::checkLogin(
+                                errors: $errors,
+                                userData: $userData,
+                            );
+                        }
+                    } catch (PDOException $e) {
+                        $errorMessage = $e->getMessage();
+                    }
                 }
             }
 
