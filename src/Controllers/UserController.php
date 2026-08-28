@@ -33,6 +33,11 @@ class UserController
         // WARNING: array mush always respect order ['name', 'email', 'password'],
         // WARNING: Better save same names like in Database
         $allowedChangeParams = ['name', 'email', 'password'];
+        $passwordNames = [
+            "OldPassword" => "old_password", 
+            "NewPassword" => "new_password", 
+            "RepeatPassword" => "repeat_password"
+        ];
 
         $errors = [];
         if (!empty($errors)) {
@@ -52,62 +57,67 @@ class UserController
                     // TODO: Refactoring DRY, KISS
                     // TODO: A lot of same arrays
                     // TODO: replace magic string on variables, like "old_password"
-                    $password = trim($_POST["old_password"]) ?? null;
-                    $newPassword = $_POST["new_password"] ?? null;
-                    $repeatPassword = $_POST["repeat_password"] ?? null;
+
+                    // WARNING: order is important
+                    $passwordValue = trim($_POST[$passwordNames['OldPassword']]) ?? null;
+                    $newPasswordValue = $_POST[$passwordNames['NewPassword']] ?? null;
+                    $repeatPasswordValue = $_POST[$passwordNames['RepeatPassword']] ?? null;
 
                     $diaplayMessage->checkEmptyInputs(
                         errors: $errors,
                         inputs: [
                             [
-                                "name" => "old_password",
-                                "value" => "{$password}",
+                                "name" => $passwordNames['OldPassword'],
+                                "value" => "{$passwordValue}",
                             ],
                             [
-                                "name" => "new_password",
-                                "value" => "{$password}",
+                                "name" => $passwordNames['NewPassword'],
+                                "value" => "{$newPasswordValue}",
                             ],
                             [
-                                "name" => "repeat_password",
-                                "value" => "{$password}",
+                                "name" => $passwordNames['RepeatPassword'],
+                                "value" => "{$repeatPasswordValue}",
                             ],
                         ],
                     );
 
-                    $email = Session::getEmail();
-                    $userData = $this->users->select(email: $email);
-                    $validPassword = password_verify(
-                        $password,
-                        $userData["password"],
-                    );
-
-                    if (empty($errors)) {
+                    if (!empty(trim($newPasswordValue))) {
+                        
                         $diaplayMessage->checkForcePassword($errors, [
-                            "name" => "new_password",
-                            "value" => "{$newPassword}",
+                            "name" => $passwordNames['NewPassword'],
+                            "value" => "{$newPasswordValue}",
                         ]);
                         $diaplayMessage->checkConfirmPassword($errors, [
                             [
-                                "name" => "new_password",
-                                "value" => "{$newPassword}",
+                                "name" => $passwordNames['NewPassword'],
+                                "value" => "{$newPasswordValue}",
                             ],
                             [
-                                "name" => "repeat_password",
-                                "value" => "{$repeatPassword}",
+                                "name" => $passwordNames['RepeatPassword'],
+                                "value" => "{$repeatPasswordValue}",
                             ],
                         ]);
                     }
 
-                    if (!$validPassword && empty($errors)) {
-                        $diaplayMessage->diaplay(
-                            $errors,
-                            inputNmae: "old_password",
-                            nameError: MESSAGE_PASSWORD_INCORRECT,
+                    if (empty($errors)) {
+                    }
+
+                    if (!empty(trim($passwordValue))) {
+                        $validPassword = password_verify(
+                            $passwordValue,
+                            $userData["password"],
                         );
+                        if (!$validPassword) {
+                            $diaplayMessage->diaplay(
+                                $errors,
+                                inputNmae: $passwordNames['OldPassword'],
+                                nameError: MESSAGE_PASSWORD_INCORRECT,
+                            );
+                        }
                     }
 
                     if (empty($errors)) {
-                        $value = EncryptPassword::encrypt($newPassword);
+                        $value = EncryptPassword::encrypt($newPasswordValue);
                         $this->users->update(
                             id: $id,
                             column: $column,
@@ -177,17 +187,17 @@ class UserController
                     [
                         [
                             "type" => "password",
-                            "name" => "old_password",
+                            "name" => $passwordNames['OldPassword'],
                             "placeholder" => "Old {$changeData}",
                         ],
                         [
                             "type" => "password",
-                            "name" => "new_password",
+                            "name" => $passwordNames['NewPassword'],
                             "placeholder" => "New {$changeData}",
                         ],
                         [
                             "type" => "password",
-                            "name" => "repeat_password",
+                            "name" => $passwordNames['RepeatPassword'],
                             "placeholder" => "Repeat {$changeData}",
                         ],
                     ],
