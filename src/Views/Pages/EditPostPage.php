@@ -13,21 +13,26 @@ require_once "../src/Views/components/textarea.php";
         <main class="flex justify-between px-10 py-5 gap-5">
             <form action="" method="post" enctype="multipart/form-data">
                 <div class="flex-1">
-                    <span class="error">* <?= htmlspecialchars($errors["title"] ?? "") ?></span>
                     <?php input_with_border(
-                        type: "text",
-                        name: "title",
-                        value: htmlspecialchars($title ?? ""),
+                        [
+                        "type" => "text",
+                        "name" => "title",
+                        "value" => $title ?? null
+                        ], error: $errors["title"] ?? null,
                     ); ?>
                 </div>
-                <span class="error">* <?= htmlspecialchars($errors["content"] ?? "") ?></span>
-                <?php textarea(name: "content", value: htmlspecialchars($content ?? "")); ?>
+                <?php textarea([
+                    "name" => "content", 
+                    "value" => $content ?? null
+                    ], error: $errors["content"] ?? null); ?>
                 <input type="hidden" name="csrf_token" value="<?= $_SESSION[
                     "csrf_token"
                 ] ?>">
                 <div>
-                    <span class="error">* <?= htmlspecialchars($errors["image"] ?? "") ?></span>
-                    <?php input_with_border(type: "file", name: "image"); ?>
+                    <?php input_with_border([
+                        "type" => "file",
+                        "name" => "image"
+                    ], error: $errors["image"] ?? null); ?>
                     <button type="submit">Save Changes</button>
                 </div>
             </form>

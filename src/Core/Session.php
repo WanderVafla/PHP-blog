@@ -5,19 +5,31 @@ class Session
 {
     private static $username = "username";
     private static $user_id = "user_id";
+    private static $user_email = 'email';
     private static $user_role = "role";
+    private static $last_action = 'last_action';
 
     public static function getUsername(): ?string
     {
-        return $_SESSION[self::$username];
+        return $_SESSION[self::$username] ?? null;
     }
     public static function getUserId(): ?int
     {
-        return $_SESSION[self::$user_id];
+        return $_SESSION[self::$user_id] ?? null;
     }
     public static function getUserRole(): ?string
     {
-        return $_SESSION[self::$user_role];
+        return $_SESSION[self::$user_role] ?? null;
+    }
+    public static function getEmail(): ?string
+    {
+        return $_SESSION[self::$user_email] ?? null;
+    }
+    public static function updateCurrentUserData(array $userData)
+    {
+        $_SESSION["username"] = $userData["name"];
+        $_SESSION['email'] = $userData['email'];
+        $_SESSION["role"] = $userData['role'];
     }
     public static function initSession()
     {
@@ -28,6 +40,10 @@ class Session
             $_SESSION["csrf_token"] = bin2hex(random_bytes(32));
         }
     }
+    public static function addAction(string $action)
+    {
+        $_SESSION[self::$last_action] = $action;
+    }
     public static function destroySession()
     {
         unset($_SESSION[self::$username]);
@@ -36,10 +52,9 @@ class Session
     }
     public static function isLoggedIn(): bool
     {
-        $username = $_SESSION[self::$username];
-        $user_id = $_SESSION[self::$user_id];
+        $user_id = self::getUserId();
 
-        if (isset($user_id) && isset($username)) {
+        if (isset($user_id) || !empty($user_id)) {
             return true;
         }
         return false;

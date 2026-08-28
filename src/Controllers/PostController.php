@@ -5,7 +5,6 @@ use Wandervafla\PhpBlog\Actions\Security\ValidateCsrfAction;
 use Wandervafla\PhpBlog\Models\Posts;
 use Wandervafla\PhpBlog\Actions\UploadImageAction;
 use Wandervafla\PhpBlog\Filteres\MaxStrlenFilter;
-use Wandervafla\PhpBlog\Filteres\XssFilter;
 use Wandervafla\PhpBlog\Core\Session;
 
 use Exception;
@@ -24,7 +23,6 @@ class PostController
         Session::notLoggedRedirect();
 
         $postModel = new Posts();
-        $xssFilter = new XssFilter();
 
         $errors = [];
 
@@ -36,7 +34,7 @@ class PostController
                 http_response_code(404);
                 exit("Post not found");
             }
-            if (!Session::isByCurrentUser($data['user_id']) && Session::getUserRole() !== 'admin') {
+            if (!Session::isByCurrentUser($data['user_id'])) {
                 header("Location: /post?id=$id");
                 exit();
             }
@@ -97,10 +95,10 @@ class PostController
                     user_id: $user_id,
                 );
                 if (isset($id)) {
-                    $_SESSION['last_action'] = FLASH_MESSAGE_EDITED;
+                    Session::addAction(FLASH_MESSAGE_EDITED);
                     header("Location: /post?id=$id");
                 } else {
-                    $_SESSION['last_action'] = FLASH_MESSAGE_CREATED;
+                    Session::addAction(FLASH_MESSAGE_CREATED);
                     header("Location: /post?id=$insertedId");
                 }
                 exit();
@@ -134,11 +132,11 @@ class PostController
     {
         $id = $_GET['id'];
         $data = new Posts()->fetchOne(id: $id);
+        Session::addAction(FLASH_MESSAGE_REMOVED);
         (bool) $isCreatedByCurrentUser = Session::isByCurrentUser($data['user_id']);
         if ($isCreatedByCurrentUser) {
             new Posts()->delete($id);
         }
-        // TODO: Understand why this not work!
         header("Location: /");
     }
 }

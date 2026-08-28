@@ -27,11 +27,38 @@ class Users
             "password" => $password,
         ]);
     }
+    public function update(int $id, string $column, string $value)
+    {
+        $stmt = $this->pdo->prepare(
+            "
+                UPDATE users
+                SET {$column} = :new_value
+                WHERE id = :id
+            ",
+        );
+        $stmt->execute([
+            "new_value" => $value,
+            "id" => $id
+        ]);
+    }
     public function select(string $email)
     {
         $stmt = $this->pdo->prepare("SELECT * FROM users WHERE email = :email");
         $stmt->execute([
             "email" => $email,
+        ]);
+
+        $data = $stmt->fetch();
+        if (!$data) {
+            return null;
+        }
+        return $data;
+    }
+    public function selectById(int $id)
+    {
+        $stmt = $this->pdo->prepare("SELECT * FROM users WHERE id = :id");
+        $stmt->execute([
+            "id" => $id,
         ]);
 
         $data = $stmt->fetch();

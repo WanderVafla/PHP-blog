@@ -9,40 +9,40 @@ require_once "../src/Views/components/head.php";
         <h1>Create a new account</h1>
         <main class="main-form">
             <form method="POST" class="flex flex-col w-110 gap-5">
-                <label for="username-register">Usename</label>
-                <span class='error'><?= htmlspecialchars($errors["username"] ?? "") ?></span>
                 <?php input_with_border(
-                    type: "text",
-                    id: "username-register",
-                    name: "username",
-                    placeholder: "Username",
+                    [
+                    "type" => "text",
+                    "id" => "username-register",
+                    "name" => "username",
+                    "placeholder" => "Username"
+                    ], label: "Username", error: $errors["username"] ?? null
                 ); ?>
 
-                <label for="email-register">Email address</label>
-                <span class='error'><?= htmlspecialchars($errors["email"] ?? "") ?></span>
+
                 <?php input_with_border(
-                    type: "text",
-                    id: "email-register",
-                    name: "email",
-                    placeholder: "email",
+                    [
+                    "id" => "email-register",
+                    "name" => "email",
+                    "placeholder" => "email",
+                    ], label: "Email address", error: $errors["email"] ?? null
                 ); ?>
 
-                <label for="sing-in-password">Password</label>
-                <span class='error'><?= htmlspecialchars($errors["password"]) ?></span>
                 <?php input_with_border(
-                    type: "password",
-                    id: "password-register",
-                    name: "password",
-                    placeholder: "Password",
+                    [
+                    "type" => "password",
+                    "id" => "password-register",
+                    "name" => "password",
+                    "placeholder" => "Password"
+                    ], label: "Password", error: $errors["password"] ?? null, 
                 ); ?>
 
-                <label for="confirm-password-register">Confirm Password</label>
-                <span class='error'><?= htmlspecialchars($errors["confirm-password"]) ?></span>
                 <?php input_with_border(
-                    type: "password",
-                    id: "confirm-password-register",
-                    name: "confirm-password",
-                    placeholder: "Password",
+                   [ 
+                    "type" => "password",
+                    "id" => "confirm-password-register",
+                    "name" => "confirm-password",
+                    "placeholder" => "Password"
+                   ], label: "Confirm Password", error: $errors["confirm-password"] ?? null
                 ); ?>
                 <input type="hidden" name="authAction" value="singup">
                 <input type="hidden" name="csrf_token" value="<?= $_SESSION[

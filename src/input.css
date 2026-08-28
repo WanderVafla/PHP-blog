@@ -25,3 +25,7 @@
 @utility link_text {
     @apply text-red-500 font-semibold;
 }
+
+@utility error {
+    @apply text-red-600
+}
