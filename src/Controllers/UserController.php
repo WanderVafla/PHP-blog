@@ -246,8 +246,9 @@ class UserController
             if ($authAction === "login") {
                 if (empty($errors)) {
                     try {
-                    $validPassword = null;
-                    $userData = $this->users->select(email: $email);
+                        $validPassword = null;
+                        $userData = $this->users->select(email: $email);
+                        $userId = $userData["id"] ?? null;
 
                         if ($userData) {
                             $validPassword = password_verify(
