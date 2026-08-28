@@ -100,9 +100,7 @@ class UserController
                             ],
                         ]);
                     }
-
-                    if (empty($errors)) {
-                    }
+                    
 
                     if (!empty(trim($passwordValue))) {
                         $email = Session::getEmail();
