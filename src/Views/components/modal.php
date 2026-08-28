@@ -20,7 +20,7 @@ function modal(array $inputs, ?bool $csrf_token = false, string $action, array &
   <!-- Backdrop: Dark overlay behind the modal -->
   <div class="fixed inset-0 bg-black/50"></div>
   <!-- Modal Box: Content goes here (Relative puts it on top of backdrop) -->
-  <form action="/profil" method="POST" class="relative rounded-2xl bg-white p-6 max-w-sm w-full">
+  <form action="" method="POST" class="relative rounded-2xl bg-white p-6 max-w-sm w-full">
 
       
       <?php foreach ($inputs as $input): ?>
