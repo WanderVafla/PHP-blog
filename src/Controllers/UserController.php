@@ -185,7 +185,8 @@ class UserController
         $changeData = $_GET['change'] ?? "";
         if (in_array($changeData, $allowedChangeParams)) {
             require "../src/Views/components/modal.php";
-            if ($changeData == "password") {
+            // $allowedChangeParams[2] it is 'password';
+            if ($changeData == $allowedChangeParams[2]) {
                 modal(
                     [
                         [
