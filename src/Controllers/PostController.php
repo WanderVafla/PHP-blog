@@ -26,8 +26,9 @@ class PostController
 
         $errors = [];
 
-        (int) ($id = $_GET["id"] ?? null);
-
+        (int) $id = $_GET["id"] ?? null;
+        $categories = $postModel->fetchAllCatogories();
+        
         if (isset($id)) {
             $data = $postModel->fetchOne($id);
             if (!$data) {

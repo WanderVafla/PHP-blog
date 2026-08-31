@@ -42,6 +42,19 @@ class Posts
             die("Query failed: " . $e->getMessage());
         }
     }
+    public function fetchAllCatogories(): array|null
+    {
+        try {
+            $stmt = $this->pdo->query('SELECT * FROM categories');
+            $data = $stmt->fetchAll();
+            if (!$data) {
+                return null;
+            }
+            return $data;
+        } catch (PDOException $e) {
+            throw new PDOException($e->getMessage());
+        }
+    }
     public function delete(int $id)
     {
         $stmt = $this->pdo->prepare(
