@@ -64,6 +64,7 @@ class PostController
             }
 
             $new_content = $_POST["content"];
+            $selectedCategorie = $_POST['selected-categories'];
             if (empty($new_content)) {
                 $errors["content"] = "Title is reuquired";
             }
@@ -95,6 +96,12 @@ class PostController
                     created_at: $created_at,
                     user_id: $user_id,
                 );
+                if (isset($selectedCategorie) && $selectedCategorie !== 'null') {
+                    $postModel->upsertCategories_post(
+                        post_id: $x = $insertedId <= 0 ? $id : $insertedId,
+                        categories_id: $selectedCategorie
+                    );
+                }
                 if (isset($id)) {
                     Session::addAction(FLASH_MESSAGE_EDITED);
                     header("Location: /post?id=$id");

@@ -55,6 +55,28 @@ class Posts
             throw new PDOException($e->getMessage());
         }
     }
+    public function upsertCategories_post(int $post_id, int $categories_id)
+    {
+        try {
+            $stmt = $this->pdo->prepare(
+            'INSERT INTO categories_post
+            (post_id, categories_id) 
+            VALUES 
+            (:post_id, :categories_id)
+            
+            ON CONFLICT(post_id, categories_id)
+            DO UPDATE SET
+                post_id = EXCLUDED.post_id,
+                categories_id = EXCLUDED.categories_id',
+            );
+            $stmt->execute([
+                ":post_id" => $post_id,
+                ":categories_id" => $categories_id,
+            ]);
+        } catch (PDOException $e) {
+            throw new PDOException($e->getMessage());
+        }
+    } 
     public function delete(int $id)
     {
         $stmt = $this->pdo->prepare(
