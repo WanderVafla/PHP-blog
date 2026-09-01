@@ -46,6 +46,19 @@ class Posts
     {
         try {
             $stmt = $this->pdo->query('SELECT * FROM categories');
+            $data = $stmt->fetchAll(PDO::FETCH_UNIQUE | PDO::FETCH_ASSOC);
+            if (!$data) {
+                return null;
+            }
+            return $data;
+        } catch (PDOException $e) {
+            throw new PDOException($e->getMessage());
+        }
+    }
+    public function fetchAllCatogories_post(): array|null
+    {
+        try {
+            $stmt = $this->pdo->query('SELECT * FROM categories_post');
             $data = $stmt->fetchAll();
             if (!$data) {
                 return null;

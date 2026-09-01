@@ -15,7 +15,21 @@ class PostController
 
     public function home()
     {
-        $posts = new Posts()->fetchAll();
+        $postsClass = new Posts();
+        $posts = $postsClass->fetchAll();
+        
+        $categories_post = $postsClass->fetchAllCatogories_post();
+        $categoriesNames = $postsClass->fetchAllCatogories();
+
+        
+        foreach ($categories_post as $categorie_post) {
+            $post_id = $categorie_post['post_id'];
+            $categorie_id = $categorie_post['categories_id'];
+            $key = array_search($post_id, array_column($posts, 'id'));
+            $posts[$key]["categorieName"] = $categoriesNames[$categorie_id]['title'];
+        }
+        
+        $categorie = $posts['categorie_id'] ?? null;
         require self::$viewPageDir . "Home.php";
     }
     public function upster()
