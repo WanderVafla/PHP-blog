@@ -12,6 +12,7 @@ use Exception;
 class PostController
 {
     private static $viewPageDir = __DIR__ . "/../Views/Pages/";
+    private Posts $postsModel;
 
     public function home()
     {
@@ -36,7 +37,7 @@ class PostController
     {
         Session::notLoggedRedirect();
 
-        $postModel = new Posts();
+        $postModel = $this->postsModel;
 
         $errors = [];
 
@@ -135,7 +136,7 @@ class PostController
     public function open()
     {
         (int) ($id = $_GET["id"]);
-        $data = new Posts()->fetchOne(id: $id);
+        $data = $this->postsModel->fetchOne(id: $id);
         if (!isset($data)) {
             http_response_code(404);
             die("Post is not exit");
@@ -153,11 +154,11 @@ class PostController
     public function remove()
     {
         $id = $_GET['id'];
-        $data = new Posts()->fetchOne(id: $id);
+        $data = $this->postsModel->fetchOne(id: $id);
         Session::addAction(FLASH_MESSAGE_REMOVED);
         (bool) $isCreatedByCurrentUser = Session::isByCurrentUser($data['user_id']);
         if ($isCreatedByCurrentUser) {
-            new Posts()->delete($id);
+            $this->postsModel->delete($id);
         }
         header("Location: /");
     }
