@@ -30,8 +30,9 @@ $login_status = Session::isLoggedIn();
                         content: htmlspecialchars($post["content"] ?? ""),
                         title: htmlspecialchars($post["title"] ?? ""),
                         path: htmlspecialchars($post["image"] ?? ""),
-                        categorie: $post["categorieName"] ?? null,
-                    ); ?>
+                        categorie: $post["categories_name"] ?? null,
+                    ); 
+                    ?>
                 <?php endforeach; ?>
 
 

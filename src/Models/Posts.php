@@ -46,7 +46,7 @@ class Posts
     {
         try {
             $stmt = $this->pdo->query('SELECT * FROM categories');
-            $data = $stmt->fetchAll(PDO::FETCH_UNIQUE | PDO::FETCH_ASSOC);
+            $data = $stmt->fetchAll();
             if (!$data) {
                 return null;
             }

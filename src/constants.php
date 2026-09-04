@@ -30,3 +30,5 @@ define('FLASH_MESSAGE_CHANGED', 'is been changed');
 define('FLASH_MESSAGE_CHANGED_FATAIL', 'not is been changed');
 
 define('CSRF_TOKEN', 'csrf_token');
+
+define('ArrayIndexOut', 'ArrayIndexOut: Array index is out');

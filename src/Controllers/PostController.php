@@ -1,6 +1,7 @@
 <?php
 namespace Wandervafla\PhpBlog\Controllers;
 
+use Error;
 use Wandervafla\PhpBlog\Actions\Security\ValidateCsrfAction;
 use Wandervafla\PhpBlog\Models\Posts;
 use Wandervafla\PhpBlog\Actions\UploadImageAction;
@@ -14,23 +15,46 @@ class PostController
     private static $viewPageDir = __DIR__ . "/../Views/Pages/";
     private Posts $postsModel;
 
+    
+    public function __construct()
+    {
+        $this->postsModel = new Posts();
+    }
+
+    private function getCategoriesLinks(?int $post_id = null): array
+    {
+        $categories_post = $this->postsModel->fetchAllCatogories_post();
+        $categoriesNames = $this->postsModel->fetchAllCatogories();
+        $indexedCategoriesName = (array_column($categoriesNames, 'title', 'id'));
+        
+        $categories_post = array_map(
+            function ($item) use ($indexedCategoriesName) {
+                $item['categorie_name'] = $indexedCategoriesName[$item['categories_id']] ?? null;
+                return $item;
+            }, $categories_post);
+
+        if (isset($post_id)) {
+            $index = array_search($post_id, array_column($categories_post, 'post_id'));
+            if (!$index) {
+                throw new Error(ArrayIndexOut);
+            }
+            return $categories_post[$index];
+        }
+        return $categories_post;
+    }
+    
     public function home()
     {
-        $postsClass = new Posts();
-        $posts = $postsClass->fetchAll();
+        $posts = $this->postsModel->fetchAll();
+        $categories = array_column($this->getCategoriesLinks(), 'categorie_name', 'post_id');
         
-        $categories_post = $postsClass->fetchAllCatogories_post();
-        $categoriesNames = $postsClass->fetchAllCatogories();
-
-        
-        foreach ($categories_post as $categorie_post) {
-            $post_id = $categorie_post['post_id'];
-            $categorie_id = $categorie_post['categories_id'];
-            $key = array_search($post_id, array_column($posts, 'id'));
-            $posts[$key]["categorieName"] = $categoriesNames[$categorie_id]['title'];
+        foreach ($categories as $catKey => $catValue) {
+            $indexPost = array_search($catKey, array_column($posts, 'id'));
+            if (isset($indexPost)) {
+                $posts[$indexPost]['categories_name'] = $catValue;
+            };
         }
         
-        $categorie = $posts['categorie_id'] ?? null;
         require self::$viewPageDir . "Home.php";
     }
     public function upster()
