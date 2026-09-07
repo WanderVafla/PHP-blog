@@ -21,10 +21,10 @@ class PostController
         $this->postsModel = new Posts();
     }
 
-    private function getCategoriesLinks(?int $post_id = null): array
+    private function getCategoriesLinks(?int $post_id = null): array|null
     {
-        $categories_post = $this->postsModel->fetchAllCatogories_post();
-        $categoriesNames = $this->postsModel->fetchAllCatogories();
+        $categories_post = $this->postsModel->fetchAllCatogories_post() ?? [];
+        $categoriesNames = $this->postsModel->fetchAllCatogories() ?? [];
         $indexedCategoriesName = (array_column($categoriesNames, 'title', 'id'));
         
         $categories_post = array_map(
@@ -35,8 +35,8 @@ class PostController
 
         if (isset($post_id)) {
             $index = array_search($post_id, array_column($categories_post, 'post_id'));
-            if (!$index) {
-                throw new Error(ArrayIndexOut);
+            if (!isset($index)) {
+                return null;
             }
             return $categories_post[$index];
         }
@@ -135,6 +135,7 @@ class PostController
                     created_at: $created_at,
                     user_id: $user_id,
                 );
+                // WARNING: string 'null' equal '-- No Categorie --'
                 if (isset($selectedCategorie) && $selectedCategorie !== 'null') {
                     $postModel->upsertCategories_post(
                         post_id: $x = $insertedId <= 0 ? $id : $insertedId,
@@ -161,6 +162,8 @@ class PostController
     {
         (int) ($id = $_GET["id"]);
         $data = $this->postsModel->fetchOne(id: $id);
+        
+        $category = $this->getCategoriesLinks($id)['categorie_name'] ?? null;
         if (!isset($data)) {
             http_response_code(404);
             die("Post is not exit");
