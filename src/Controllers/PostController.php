@@ -137,6 +137,12 @@ class PostController
                 );
                 // WARNING: string 'null' equal '-- No Categorie --'
                 if (isset($selectedCategorie) && $selectedCategorie !== 'null') {
+                    if ($id) {  
+                        $postModel->delete(
+                            values: ['post_id' => $id],
+                            table: 'categories_post'
+                        );
+                    }
                     $postModel->upsertCategories_post(
                         post_id: $x = $insertedId <= 0 ? $id : $insertedId,
                         categories_id: $selectedCategorie
