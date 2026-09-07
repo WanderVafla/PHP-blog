@@ -4,9 +4,20 @@ require_once "../src/constants.php";
 
 use Wandervafla\PhpBlog\Controllers\PostController;
 use Wandervafla\PhpBlog\Controllers\UserController;
+use Wandervafla\PhpBlog\Core\Database;
 use Wandervafla\PhpBlog\Core\Session;
 
+(bool) $dbInit = false;
+
 Session::initSession();
+
+$schemaLockFile = "../db/db_init.lock";
+if (!file_exists($schemaLockFile)) {
+    $pdo = Database::Connection();
+    Database::initSchema(pdo: $pdo);
+
+    file_put_contents($schemaLockFile, date('Y-m-d H:i:s'));
+}
 
 $controller = new PostController();
 $controllerUsers = new UserController();

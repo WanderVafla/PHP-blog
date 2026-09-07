@@ -1,5 +1,6 @@
+<?= require_once "categorieName.php"  ?>
 <?php
-function post(int $id, string $title, string $content, string $path)
+function post(int $id, string $title, string $content, string $path, ?string $categorie = null)
 {
     if (!file_exists($path)) {
         $path = "/asset/notImage.png";
@@ -8,6 +9,7 @@ function post(int $id, string $title, string $content, string $path)
         <img src="<?= $path ?>" alt="Post image" class="size-60 object-cover rounded-4xl" >
         <div class='flex flex-col px-2 py-1 gap-1'>
             <p class='text-xl font-semibold'><a class="hover:text-red-500" href="/post?id=<?= $id ?>"><?= $title ?></a></p>
+            <?php categorieName($categorie ?? null); ?>
             <p class='text-wrap truncate w-60 h-30' >
                 <?= $content ?>
             </p>

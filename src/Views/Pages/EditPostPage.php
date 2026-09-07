@@ -25,6 +25,7 @@ require_once "../src/Views/components/textarea.php";
                     "name" => "content", 
                     "value" => $content ?? null
                     ], error: $errors["content"] ?? null); ?>
+                <?php require_once "../src/Views/components/categories.php"; ?>
                 <input type="hidden" name="csrf_token" value="<?= $_SESSION[
                     "csrf_token"
                 ] ?>">

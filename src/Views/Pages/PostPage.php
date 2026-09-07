@@ -1,7 +1,6 @@
 <?php
-
 require_once '../src/Views/components/head.php';
-
+require_once '../src/Views/components/categorieName.php';
 ?>
 
 <!doctype html>
@@ -19,7 +18,8 @@ require_once '../src/Views/components/head.php';
                 <h1 class="sticky top-10 text-balance"><?= htmlspecialchars($title) ?></h1>
             </div>
             <p class="flex-2 text-balance whitespace-pre-line shadow-[-10px_10px_20px_rgb(0_0_0_/_0.1)_,_-10px_-10px_20px_rgb(0_0_0_/_0.1)] rounded-4xl px-5 my-20">
-                <?= htmlspecialchars($content) ?>
+                <?php categorieName($category ?? ""); ?>
+                <?= htmlspecialchars($content ?? '') ?>
             </p>
         </main>
     </body>

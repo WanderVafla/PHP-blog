@@ -1,6 +1,7 @@
 <?php
 namespace Wandervafla\PhpBlog\Controllers;
 
+use Error;
 use Wandervafla\PhpBlog\Actions\Security\ValidateCsrfAction;
 use Wandervafla\PhpBlog\Models\Posts;
 use Wandervafla\PhpBlog\Actions\UploadImageAction;
@@ -12,22 +13,61 @@ use Exception;
 class PostController
 {
     private static $viewPageDir = __DIR__ . "/../Views/Pages/";
+    private Posts $postsModel;
+
+
+    public function __construct()
+    {
+        $this->postsModel = new Posts();
+    }
+
+    private function getCategoriesLinks(?int $post_id = null): array|null
+    {
+        $categories_post = $this->postsModel->fetchAllCatogories_post() ?? [];
+        $categoriesNames = $this->postsModel->fetchAllCatogories() ?? [];
+        $indexedCategoriesName = (array_column($categoriesNames, 'title', 'id'));
+        $categories_post = array_map(
+            function ($item) use ($indexedCategoriesName) {
+                $item['categorie_name'] = $indexedCategoriesName[$item['categories_id']] ?? null;
+                return $item;
+            }, $categories_post);
+
+        if (isset($post_id)) {
+            $index = array_search($post_id, array_column($categories_post, 'post_id'));
+            if ($index === false) {
+                return null;
+            }
+            return $categories_post[$index];
+        }
+        return $categories_post;
+    }
 
     public function home()
     {
-        $posts = new Posts()->fetchAll();
+        $posts = $this->postsModel->fetchAll();
+        $categories = array_column($this->getCategoriesLinks(), 'categorie_name', 'post_id');
+
+        foreach ($categories as $catKey => $catValue) {
+            $indexPost = array_search($catKey, array_column($posts, 'id'));
+            if ($indexPost !== false) {
+                $posts[$indexPost]['categories_name'] = $catValue;
+            };
+        }
+
         require self::$viewPageDir . "Home.php";
     }
     public function upster()
     {
         Session::notLoggedRedirect();
 
-        $postModel = new Posts();
+        $postModel = $this->postsModel;
 
         $errors = [];
 
-        (int) ($id = $_GET["id"] ?? null);
-
+        (int) $id = $_GET["id"] ?? null;
+        $categories = $postModel->fetchAllCatogories();
+        $category_id = $this->getCategoriesLinks($id)['categories_id'] ?? null;
+        
         if (isset($id)) {
             $data = $postModel->fetchOne($id);
             if (!$data) {
@@ -63,6 +103,7 @@ class PostController
             }
 
             $new_content = $_POST["content"];
+            $selectedCategorie = $_POST['selected-categories'];
             if (empty($new_content)) {
                 $errors["content"] = "Title is reuquired";
             }
@@ -94,6 +135,25 @@ class PostController
                     created_at: $created_at,
                     user_id: $user_id,
                 );
+                // WARNING: string 'null' equal '-- No Categorie --'
+                if (isset($selectedCategorie) && $selectedCategorie !== 'null') {
+                    if ($id) {  
+                        $postModel->delete(
+                            values: ['post_id' => $id],
+                            table: 'categories_post'
+                        );
+                    }
+                    $postModel->upsertCategories_post(
+                        post_id: $x = $insertedId <= 0 ? $id : $insertedId,
+                        categories_id: $selectedCategorie
+                    );
+                }
+                if (isset($selectedCategorie) && $selectedCategorie === 'null') {
+                    $postModel->delete(
+                    values: [
+                        'post_id' => $id, 
+                    ], table: 'categories_post');
+                }
                 if (isset($id)) {
                     Session::addAction(FLASH_MESSAGE_EDITED);
                     header("Location: /post?id=$id");
@@ -113,7 +173,9 @@ class PostController
     public function open()
     {
         (int) ($id = $_GET["id"]);
-        $data = new Posts()->fetchOne(id: $id);
+        $data = $this->postsModel->fetchOne(id: $id);
+        
+        $category = $this->getCategoriesLinks($id)['categorie_name'] ?? null;
         if (!isset($data)) {
             http_response_code(404);
             die("Post is not exit");
@@ -131,11 +193,11 @@ class PostController
     public function remove()
     {
         $id = $_GET['id'];
-        $data = new Posts()->fetchOne(id: $id);
+        $data = $this->postsModel->fetchOne(id: $id);
         Session::addAction(FLASH_MESSAGE_REMOVED);
         (bool) $isCreatedByCurrentUser = Session::isByCurrentUser($data['user_id']);
         if ($isCreatedByCurrentUser) {
-            new Posts()->delete($id);
+            $this->postsModel->delete(['id' => $id]);
         }
         header("Location: /");
     }

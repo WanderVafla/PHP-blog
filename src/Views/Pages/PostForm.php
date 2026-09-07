@@ -28,6 +28,9 @@ require_once "../src/Views/components/head.php";
                     "name" => "content", 
                     "placeholder" => "Description"
                 ], error: $errors["content"]  ?? null); ?>
+                
+                <?php require_once "../src/Views/components/categories.php"; ?>
+                
                 <?php input_with_border(
                     [
                     "type" => "file",
