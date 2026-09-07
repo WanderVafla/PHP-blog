@@ -34,7 +34,7 @@ class PostController
 
         if (isset($post_id)) {
             $index = array_search($post_id, array_column($categories_post, 'post_id'));
-            if (!isset($index)) {
+            if ($index === false) {
                 return null;
             }
             return $categories_post[$index];
