@@ -32,3 +32,5 @@ define('FLASH_MESSAGE_CHANGED_FATAIL', 'not is been changed');
 define('CSRF_TOKEN', 'csrf_token');
 
 define('ArrayIndexOut', 'ArrayIndexOut: Array index is out');
+define('NotAllowedValue', 'NotAllowedValue: Value is not Allowed');
+define('SQLSchemaNotFound', 'SQLSchemaNotFound: File with schema for database not found');

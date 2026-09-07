@@ -4,9 +4,17 @@ require_once "../src/constants.php";
 
 use Wandervafla\PhpBlog\Controllers\PostController;
 use Wandervafla\PhpBlog\Controllers\UserController;
+use Wandervafla\PhpBlog\Core\Database;
 use Wandervafla\PhpBlog\Core\Session;
 
+(bool) $dbInit = false;
+
 Session::initSession();
+if (!$dbInit) {
+    $pdo = Database::Connection();
+    Database::initSchema($pdo);
+    $dbInit = true;
+}
 
 $controller = new PostController();
 $controllerUsers = new UserController();

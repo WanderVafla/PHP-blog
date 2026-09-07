@@ -1,6 +1,8 @@
 <?php
 namespace Wandervafla\PhpBlog\Core;
 
+use Error;
+use Exception;
 use PDO;
 use PDOException;
 
@@ -8,13 +10,14 @@ class Database
 {
     private static ?PDO $instance = null;
 
+    private static $schemaFile = __DIR__ . '/../../db/schema.sql';
+    
     public static function Connection(): PDO
     {
         if (self::$instance === null) {
             $dbPath = __DIR__ . "/../../db/database.db";
 
             try {
-                    
                 self::$instance = new PDO("sqlite:" . $dbPath);
                 self::$instance->setAttribute(
                     PDO::ATTR_ERRMODE,
@@ -26,5 +29,16 @@ class Database
             }
         }
         return self::$instance;
+    }
+    public static function initSchema(PDO $pdo)
+    {
+        if (!file_exists(self::$schemaFile)) {
+            throw new Exception(SQLSchemaNotFound);
+        }
+
+        $sqlSchema = file_get_contents(self::$schemaFile);
+        if (isset($pdo)) {
+            $pdo->exec($sqlSchema);
+        }
     }
 }
