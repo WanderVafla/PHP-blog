@@ -1,7 +1,7 @@
 <?php
 namespace Wandervafla\PhpBlog\Models;
 
-use Exception;
+use Error;
 use PDO;
 use PDOException;
 use Wandervafla\PhpBlog\Core\Database;
@@ -10,7 +10,7 @@ class Posts
 {
     private PDO $pdo;
     private static $allowedColumns = ['id', 'title', 'image', 'content', 'created_at', 'user_id'];
-
+    private static $allowedTables = ['categories', 'categories_post', 'posts', 'users'];
     public function __construct()
     {
         $this->pdo = Database::Connection();
@@ -89,13 +89,28 @@ class Posts
         } catch (PDOException $e) {
             throw new PDOException($e->getMessage());
         }
-    } 
-    public function delete(int $id)
+    }
+    public function delete(array $values, ?string $table = 'posts') 
     {
+        if (!in_array($table, self::$allowedTables)) {
+            throw new Error(NotAllowedValue);
+        };
+        
         $stmt = $this->pdo->prepare(
-            'DELETE FROM posts WHERE id = :id'
-        );
-        $stmt->execute(['id' => $id]);
+            "DELETE FROM $table WHERE " . match ($table) {
+                'posts' => 'id = :id',
+                'categories_post' => 'post_id = :post_id',
+                default => throw new Error(NotAllowedValue),
+            });
+        if ($table === 'posts') {
+            $stmt->execute(['id' => $values['id']]);
+        }
+        if ($table === 'categories_post') {
+            // echo $values['post_id'];
+            $stmt->execute([
+                'post_id' => $values['post_id'],
+            ]);
+        }
     }
     public function upsert(
         int|null $id,

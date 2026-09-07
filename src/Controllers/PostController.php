@@ -15,7 +15,7 @@ class PostController
     private static $viewPageDir = __DIR__ . "/../Views/Pages/";
     private Posts $postsModel;
 
-    
+
     public function __construct()
     {
         $this->postsModel = new Posts();
@@ -26,7 +26,6 @@ class PostController
         $categories_post = $this->postsModel->fetchAllCatogories_post() ?? [];
         $categoriesNames = $this->postsModel->fetchAllCatogories() ?? [];
         $indexedCategoriesName = (array_column($categoriesNames, 'title', 'id'));
-        
         $categories_post = array_map(
             function ($item) use ($indexedCategoriesName) {
                 $item['categorie_name'] = $indexedCategoriesName[$item['categories_id']] ?? null;
@@ -42,19 +41,19 @@ class PostController
         }
         return $categories_post;
     }
-    
+
     public function home()
     {
         $posts = $this->postsModel->fetchAll();
         $categories = array_column($this->getCategoriesLinks(), 'categorie_name', 'post_id');
-        
+
         foreach ($categories as $catKey => $catValue) {
             $indexPost = array_search($catKey, array_column($posts, 'id'));
             if (isset($indexPost)) {
                 $posts[$indexPost]['categories_name'] = $catValue;
             };
         }
-        
+
         require self::$viewPageDir . "Home.php";
     }
     public function upster()
@@ -67,7 +66,7 @@ class PostController
 
         (int) $id = $_GET["id"] ?? null;
         $categories = $postModel->fetchAllCatogories();
-        
+
         if (isset($id)) {
             $data = $postModel->fetchOne($id);
             if (!$data) {
@@ -142,6 +141,12 @@ class PostController
                         categories_id: $selectedCategorie
                     );
                 }
+                if (isset($selectedCategorie) && $selectedCategorie === 'null') {
+                    $postModel->delete(
+                    values: [
+                        'post_id' => $id, 
+                    ], table: 'categories_post');
+                }
                 if (isset($id)) {
                     Session::addAction(FLASH_MESSAGE_EDITED);
                     header("Location: /post?id=$id");
@@ -185,7 +190,7 @@ class PostController
         Session::addAction(FLASH_MESSAGE_REMOVED);
         (bool) $isCreatedByCurrentUser = Session::isByCurrentUser($data['user_id']);
         if ($isCreatedByCurrentUser) {
-            $this->postsModel->delete($id);
+            $this->postsModel->delete(['id' => $id]);
         }
         header("Location: /");
     }
