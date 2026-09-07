@@ -49,7 +49,7 @@ class PostController
 
         foreach ($categories as $catKey => $catValue) {
             $indexPost = array_search($catKey, array_column($posts, 'id'));
-            if (isset($indexPost)) {
+            if ($indexPost !== false) {
                 $posts[$indexPost]['categories_name'] = $catValue;
             };
         }
