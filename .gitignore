@@ -4,3 +4,4 @@ database.db
 /public/images
 public/output.css
 Todos.md
+db_init.lock
