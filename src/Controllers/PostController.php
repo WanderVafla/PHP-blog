@@ -66,7 +66,8 @@ class PostController
 
         (int) $id = $_GET["id"] ?? null;
         $categories = $postModel->fetchAllCatogories();
-
+        $category_id = $this->getCategoriesLinks($id)['categories_id'] ?? null;
+        
         if (isset($id)) {
             $data = $postModel->fetchOne($id);
             if (!$data) {
