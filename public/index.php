@@ -10,10 +10,13 @@ use Wandervafla\PhpBlog\Core\Session;
 (bool) $dbInit = false;
 
 Session::initSession();
-if (!$dbInit) {
+
+$schemaLockFile = "../db/db_init.lock";
+if (!file_exists($schemaLockFile)) {
     $pdo = Database::Connection();
-    Database::initSchema($pdo);
-    $dbInit = true;
+    Database::initSchema(pdo: $pdo);
+
+    file_put_contents($schemaLockFile, date('Y-m-d H:i:s'));
 }
 
 $controller = new PostController();
