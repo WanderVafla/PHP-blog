@@ -10,15 +10,14 @@ class Database
 {
     private static ?PDO $instance = null;
 
+    private static $dbPath = __DIR__ . "/../../db/database.db";
     private static $schemaFile = __DIR__ . '/../../db/schema.sql';
     
     public static function Connection(): PDO
     {
         if (self::$instance === null) {
-            $dbPath = __DIR__ . "/../../db/database.db";
-
             try {
-                self::$instance = new PDO("sqlite:" . $dbPath);
+                self::$instance = new PDO("sqlite:" . self::$dbPath);
                 self::$instance->setAttribute(
                     PDO::ATTR_ERRMODE,
                     PDO::ERRMODE_EXCEPTION,
