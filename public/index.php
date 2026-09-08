@@ -1,4 +1,5 @@
 <?php
+
 require_once __DIR__ . "/../vendor/autoload.php";
 require_once "../src/constants.php";
 
@@ -27,7 +28,7 @@ $viewPagesDir = '../src/Views/Pages/';
 switch ($request) {
     case '':
     case '/':
-    
+
         $controller->home();
         break;
     case '/login':
@@ -56,9 +57,7 @@ if (!empty($_SESSION["last_action"])) {
     require "../src/Views/components/message.php";
     unset($_SESSION["last_action"]);
 }
-    if (!empty($_SESSION['last_action'])) {
-        require '../src/Views/components/message.php';
-        unset($_SESSION['last_action']);
-    }
-
-?>
+if (!empty($_SESSION['last_action'])) {
+    require '../src/Views/components/message.php';
+    unset($_SESSION['last_action']);
+}

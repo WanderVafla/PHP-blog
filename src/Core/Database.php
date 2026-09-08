@@ -1,7 +1,7 @@
 <?php
+
 namespace Wandervafla\PhpBlog\Core;
 
-use Error;
 use Exception;
 use PDO;
 use PDOException;
@@ -12,7 +12,7 @@ class Database
 
     private static $dbPath = __DIR__ . "/../../db/database.db";
     private static $schemaFile = __DIR__ . '/../../db/schema.sql';
-    
+
     public static function Connection(): PDO
     {
         if (self::$instance === null) {

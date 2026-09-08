@@ -31,7 +31,7 @@ $login_status = Session::isLoggedIn();
                         title: htmlspecialchars($post["title"] ?? ""),
                         path: htmlspecialchars($post["image"] ?? ""),
                         categorie: $post["categories_name"] ?? "",
-                    ); 
+                    );
                     ?>
                 <?php endforeach; ?>
 

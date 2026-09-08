@@ -1,4 +1,5 @@
 <?php
+
 namespace Wandervafla\PhpBlog\Controllers;
 
 use PDOException;
@@ -21,21 +22,21 @@ class UserController
     }
     public function singout()
     {
-            Session::destroySession();
-            Session::addAction(FLASH_MESSAGE_SINOUT);
-            header("Location: /");
-            exit();
+        Session::destroySession();
+        Session::addAction(FLASH_MESSAGE_SINOUT);
+        header("Location: /");
+        exit();
     }
     public function profil()
     {
         Session::notLoggedRedirect();
-        
+
         // WARNING: array mush always respect order ['name', 'email', 'password'],
         // WARNING: Better save same names like in Database
         $allowedChangeParams = ['name', 'email', 'password'];
         $passwordNames = [
-            "OldPassword" => "old_password", 
-            "NewPassword" => "new_password", 
+            "OldPassword" => "old_password",
+            "NewPassword" => "new_password",
             "RepeatPassword" => "repeat_password"
         ];
 
@@ -82,7 +83,7 @@ class UserController
                     );
 
                     if (!empty(trim($newPasswordValue))) {
-                        
+
                         $diaplayMessage->checkForcePassword($errors, [
                             "name" => $passwordNames['NewPassword'],
                             "value" => "{$newPasswordValue}",
@@ -100,12 +101,12 @@ class UserController
                             ],
                         ]);
                     }
-                    
+
 
                     if (!empty(trim($passwordValue))) {
                         $email = Session::getEmail();
                         $userData = $this->users->select(email: $email);
-                        
+
                         $validPassword = password_verify(
                             $passwordValue,
                             $userData["password"],
@@ -141,8 +142,8 @@ class UserController
 
                 (array) $currentInput = ["name" => 'value', "value" => $value];
 
-                
-                
+
+
                 $diaplayMessage->checkEmptyInputs(
                     errors: $errors,
                     inputs: $currentInput
@@ -150,7 +151,7 @@ class UserController
                 if ($column === $allowedChangeParams[1]) {
                     $diaplayMessage->checkEmail($errors, $currentInput);
                 }
-                
+
                 if (empty($errors)) {
                     try {
                         $this->users->update(
@@ -236,7 +237,7 @@ class UserController
         $email = Session::getEmail();
 
         $posts = new Posts()->fetchAll('user_id', $user_id);
-        
+
         require self::$viewPageDir . "Profil.php";
     }
     // TODO: Chnage name of function

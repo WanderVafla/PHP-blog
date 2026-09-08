@@ -1,7 +1,7 @@
 <?php
+
 namespace Wandervafla\PhpBlog\Models;
 
-use PDOException;
 use PDO;
 use Wandervafla\PhpBlog\Core\Database;
 

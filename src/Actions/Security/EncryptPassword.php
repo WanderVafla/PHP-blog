@@ -1,4 +1,5 @@
 <?php
+
 namespace Wandervafla\PhpBlog\Actions\Security;
 
 class EncryptPassword
@@ -8,4 +9,3 @@ class EncryptPassword
         return password_hash($password, PASSWORD_BCRYPT);
     }
 }
-?>
