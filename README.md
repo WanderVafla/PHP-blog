@@ -40,7 +40,6 @@ sudo mv tailwindcss-linux-x64 /usr/local/bin/tailwindcss
 
 Once installed, generate the config and build the CSS:
 ```bash
-tailwindcss init
 tailwindcss -i ./src/input.css -o ./public/output.css --watch
 ```
 
