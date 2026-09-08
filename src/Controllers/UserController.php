@@ -171,7 +171,6 @@ class UserController
                         header("Location: /profil");
                     } catch (PDOException $e) {
                         $errorMessage = $e->getMessage();
-                        echo $column;
                         if (str_contains($errorMessage, "users.name")) {
                             $errors["value"] = MESSAGE_USERNAME_EXIST;
                         }
