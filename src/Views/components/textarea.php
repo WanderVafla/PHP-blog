@@ -49,7 +49,7 @@ function textarea(array $params, ?string $label = null, ?string $error = null)
                 <?= $placeholder
                     ? 'placeholder="' . htmlspecialchars($placeholder) . '"'
                     : null ?>
-            ><?=$value?></textarea>
+            ><?=htmlspecialchars($value ?? '')?></textarea>
         </div>
     </div>
 
