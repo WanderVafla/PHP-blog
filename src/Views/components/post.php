@@ -9,7 +9,7 @@ function post(int $id, string $title, string $content, string $path, ?string $ca
         <img src="<?= $path ?>" alt="Post image" class="size-60 object-cover rounded-4xl" >
         <div class='flex flex-col px-2 py-1 gap-1'>
             <p class='text-xl font-semibold'><a class="hover:text-red-500" href="/post?id=<?= $id ?>"><?= $title ?></a></p>
-            <?php categorieName($categorie ?? null); ?>
+            <?php categorieName($categorie ?? ""); ?>
             <p class='text-wrap truncate w-60 h-30' >
                 <?= $content ?>
             </p>
