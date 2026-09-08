@@ -20,7 +20,7 @@ class UserController
     {
         $this->users = new Users();
     }
-    public function singout()
+    public function logout()
     {
         Session::destroySession();
         Session::addAction(FLASH_MESSAGE_SINOUT);

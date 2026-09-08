@@ -44,7 +44,7 @@ switch ($request) {
         $controller->open();
         break;
     case "/logout":
-        $controllerUsers->singout();
+        $controllerUsers->logout();
         break;
     case "/removePost":
         $controller->remove();
