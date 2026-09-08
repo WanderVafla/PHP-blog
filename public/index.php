@@ -57,7 +57,3 @@ if (!empty($_SESSION["last_action"])) {
     require "../src/Views/components/message.php";
     unset($_SESSION["last_action"]);
 }
-if (!empty($_SESSION['last_action'])) {
-    require '../src/Views/components/message.php';
-    unset($_SESSION['last_action']);
-}
