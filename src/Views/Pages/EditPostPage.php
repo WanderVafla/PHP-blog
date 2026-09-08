@@ -22,7 +22,7 @@ require_once "../src/Views/components/textarea.php";
                     ); ?>
                 </div>
                 <?php textarea([
-                    "name" => "content", 
+                    "name" => "content",
                     "value" => $content ?? null
                     ], error: $errors["content"] ?? null); ?>
                 <?php require_once "../src/Views/components/categories.php"; ?>

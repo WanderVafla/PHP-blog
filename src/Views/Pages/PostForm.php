@@ -25,7 +25,7 @@ require_once "../src/Views/components/head.php";
                     ], label: "Title", error: $errors["title"] ?? null
                 ); ?>
                 <?php textarea([
-                    "name" => "content", 
+                    "name" => "content",
                     "placeholder" => "Description"
                 ], error: $errors["content"]  ?? null); ?>
                 

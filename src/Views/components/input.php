@@ -1,5 +1,5 @@
 <?php
-/** 
+/**
  * @param array{
  *      id?: string,
  *      name?: string,
@@ -13,7 +13,7 @@
 function input_with_border(
     array $params,
     ?string $label = null,
-    ?string $error = null 
+    ?string $error = null
 ) {
     $defaultParams = [
         'id' => null,
@@ -22,7 +22,7 @@ function input_with_border(
         'placeholder' => null,
         'value' => null,
     ];
-        
+
     $id = $params['id'] ?? null;
     $type = $params['type'] ?? null;
     $name = $params['name'] ?? null;

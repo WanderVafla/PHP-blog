@@ -1,7 +1,6 @@
 <?php
-namespace Wandervafla\PhpBlog\Filteres;
 
-use Exception;
+namespace Wandervafla\PhpBlog\Filteres;
 
 class PasswordComplexityFilter
 {

@@ -10,11 +10,8 @@
  * @param string|null $label
  * @param string|null $error
  */
-function textarea(
-    array $params,
-    ?string $label = null,
-    ?string $error = null,
-) {
+function textarea(array $params, ?string $label = null, ?string $error = null)
+{
     $defaultParams = [
         "id" => null,
         "type" => "text",
@@ -52,11 +49,7 @@ function textarea(
                 <?= $placeholder
                     ? 'placeholder="' . htmlspecialchars($placeholder) . '"'
                     : null ?>
-            >
-                <?= $value
-                    ? 'value="' . htmlspecialchars($value) . '"'
-                    : null ?>
-            </textarea>
+            ><?=htmlspecialchars($value ?? '')?></textarea>
         </div>
     </div>
 

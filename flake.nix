@@ -1,5 +1,5 @@
 {
-  description = "";
+  description = "Development environment for PHP Blog with Tailwind CSS";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
@@ -7,32 +7,48 @@
 
   outputs = { self, nixpkgs }:
     let
-      system = "x86_64-linux";
-      
-      pkgs = nixpkgs.legacyPackages.${system};
+      supportedSystems = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
+      forAllSystems = nixpkgs.lib.genAttrs supportedSystems;
     in
     {
-      devShells.${system}.default = pkgs.mkShell {
-        
-        buildInputs = with pkgs; [
-                  php
-                  phpPackages.composer
-                  tailwindcss_4          
-                ];
+      devShells = forAllSystems (system:
+        let
+          pkgs = nixpkgs.legacyPackages.${system};
+        in
+        {
+          default = pkgs.mkShell {
+            buildInputs = with pkgs; [
+              php
+              phpPackages.composer
+              tailwindcss_4
+              concurrently
+            ];
 
-        shellHook = ''
-          echo "Initialize a config file (tailwind.config.js)"
-          tailwindcss init
-          
-          echo "Watch for changes and build your CSS"
-          tailwindcss -i ./src/input.css -o ./public/output.css --watch >> /dev/null & 
-                    
-          sleep 1
-          
-          echo "PHP server is started"
-          kitty --hold sh -c "php -S localhost:8000 -t public" &
-          
-        '';
-      };
+            shellHook = ''
+              if [ ! -d "vendor" ] && [ -f "composer.json" ]; then
+                echo "📦 Installing PHP dependencies via Composer..."
+                composer install
+              fi
+
+              if [ ! -f "src/input.css" ]; then
+                echo "📝 Creating initial src/input.css..."
+                mkdir -p src
+                echo -e "@import \"tailwindcss\";" > src/input.css
+              fi
+
+              alias watch-css="tailwindcss -i ./src/input.css -o ./public/output.css --watch"
+              alias serve="php -S localhost:8000 -t public"
+              alias dev="concurrently -n 'CSS,PHP' -c 'blue,green' \"tailwindcss -i ./src/input.css -o ./public/output.css --watch\" \"php -S localhost:8000 -t public\""
+
+              echo ""
+              echo "🚀 Dev Environment Ready!"
+              echo "  • Run 'dev'       -> Start Tailwind watcher & PHP server concurrently"
+              echo "  • Run 'serve'     -> Start PHP server only"
+              echo "  • Run 'watch-css' -> Start Tailwind compiler only"
+              echo ""
+            '';
+          };
+        }
+      );
     };
 }

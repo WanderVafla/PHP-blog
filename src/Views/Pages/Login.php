@@ -23,7 +23,9 @@ require_once "../src/Views/components/head.php";
                     "type" => "password",
                     "name" => "password",
                     "placeholder" => "Password",
-                    ], label: "Password", error: $errors['password'] ?? null
+                    ],
+                    label: "Password",
+                    error: $errors['password'] ?? null
                 ); ?>
                 <input type="hidden" name="authAction" value="login">
                 <input type="hidden" name="csrf_token" value="<?= $_SESSION[

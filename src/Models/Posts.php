@@ -1,4 +1,5 @@
 <?php
+
 namespace Wandervafla\PhpBlog\Models;
 
 use Error;
@@ -72,7 +73,7 @@ class Posts
     {
         try {
             $stmt = $this->pdo->prepare(
-            'INSERT INTO categories_post
+                'INSERT INTO categories_post
             (post_id, categories_id) 
             VALUES 
             (:post_id, :categories_id)
@@ -90,23 +91,23 @@ class Posts
             throw new PDOException($e->getMessage());
         }
     }
-    public function delete(array $values, ?string $table = 'posts') 
+    public function delete(array $values, ?string $table = 'posts')
     {
         if (!in_array($table, self::$allowedTables)) {
             throw new Error(NotAllowedValue);
         };
-        
+
         $stmt = $this->pdo->prepare(
             "DELETE FROM $table WHERE " . match ($table) {
                 'posts' => 'id = :id',
                 'categories_post' => 'post_id = :post_id',
                 default => throw new Error(NotAllowedValue),
-            });
+            }
+        );
         if ($table === 'posts') {
             $stmt->execute(['id' => $values['id']]);
         }
         if ($table === 'categories_post') {
-            // echo $values['post_id'];
             $stmt->execute([
                 'post_id' => $values['post_id'],
             ]);
@@ -122,7 +123,7 @@ class Posts
     ) {
         try {
             $stmt = $this->pdo->prepare(
-            'INSERT INTO posts
+                'INSERT INTO posts
             (id, title, image, content, created_at, user_id) 
             VALUES 
             (:id, :title, :image, :content, :created_at, :user_id)

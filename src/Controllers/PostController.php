@@ -1,13 +1,12 @@
 <?php
+
 namespace Wandervafla\PhpBlog\Controllers;
 
-use Error;
 use Wandervafla\PhpBlog\Actions\Security\ValidateCsrfAction;
 use Wandervafla\PhpBlog\Models\Posts;
 use Wandervafla\PhpBlog\Actions\UploadImageAction;
 use Wandervafla\PhpBlog\Filteres\MaxStrlenFilter;
 use Wandervafla\PhpBlog\Core\Session;
-
 use Exception;
 
 class PostController
@@ -30,7 +29,9 @@ class PostController
             function ($item) use ($indexedCategoriesName) {
                 $item['categorie_name'] = $indexedCategoriesName[$item['categories_id']] ?? null;
                 return $item;
-            }, $categories_post);
+            },
+            $categories_post
+        );
 
         if (isset($post_id)) {
             $index = array_search($post_id, array_column($categories_post, 'post_id'));
@@ -67,7 +68,7 @@ class PostController
         (int) $id = $_GET["id"] ?? null;
         $categories = $postModel->fetchAllCatogories();
         $category_id = $this->getCategoriesLinks($id)['categories_id'] ?? null;
-        
+
         if (isset($id)) {
             $data = $postModel->fetchOne($id);
             if (!$data) {
@@ -137,7 +138,7 @@ class PostController
                 );
                 // WARNING: string 'null' equal '-- No Categorie --'
                 if (isset($selectedCategorie) && $selectedCategorie !== 'null') {
-                    if ($id) {  
+                    if ($id) {
                         $postModel->delete(
                             values: ['post_id' => $id],
                             table: 'categories_post'
@@ -150,9 +151,11 @@ class PostController
                 }
                 if (isset($selectedCategorie) && $selectedCategorie === 'null') {
                     $postModel->delete(
-                    values: [
-                        'post_id' => $id, 
-                    ], table: 'categories_post');
+                        values: [
+                        'post_id' => $id,
+                    ],
+                        table: 'categories_post'
+                    );
                 }
                 if (isset($id)) {
                     Session::addAction(FLASH_MESSAGE_EDITED);
@@ -174,7 +177,7 @@ class PostController
     {
         (int) ($id = $_GET["id"]);
         $data = $this->postsModel->fetchOne(id: $id);
-        
+
         $category = $this->getCategoriesLinks($id)['categorie_name'] ?? null;
         if (!isset($data)) {
             http_response_code(404);
@@ -198,6 +201,9 @@ class PostController
         (bool) $isCreatedByCurrentUser = Session::isByCurrentUser($data['user_id']);
         if ($isCreatedByCurrentUser) {
             $this->postsModel->delete(['id' => $id]);
+            if (!empty($data['image']) && file_exists($data['image'])) {
+                unlink($data['image']);
+            }
         }
         header("Location: /");
     }

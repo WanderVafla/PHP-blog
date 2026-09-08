@@ -33,16 +33,16 @@ require_once "../src/Views/components/head.php";
                     "id" => "password-register",
                     "name" => "password",
                     "placeholder" => "Password"
-                    ], label: "Password", error: $errors["password"] ?? null, 
+                    ], label: "Password", error: $errors["password"] ?? null,
                 ); ?>
 
                 <?php input_with_border(
-                   [ 
-                    "type" => "password",
-                    "id" => "confirm-password-register",
-                    "name" => "confirm-password",
-                    "placeholder" => "Password"
-                   ], label: "Confirm Password", error: $errors["confirm-password"] ?? null
+                    [
+                     "type" => "password",
+                     "id" => "confirm-password-register",
+                     "name" => "confirm-password",
+                     "placeholder" => "Password"
+                    ], label: "Confirm Password", error: $errors["confirm-password"] ?? null
                 ); ?>
                 <input type="hidden" name="authAction" value="singup">
                 <input type="hidden" name="csrf_token" value="<?= $_SESSION[

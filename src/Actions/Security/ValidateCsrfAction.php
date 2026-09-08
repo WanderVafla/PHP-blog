@@ -1,4 +1,5 @@
 <?php
+
 namespace Wandervafla\PhpBlog\Actions\Security;
 
 use Exception;

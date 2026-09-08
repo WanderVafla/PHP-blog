@@ -1,4 +1,5 @@
 <?php
+
 namespace Wandervafla\PhpBlog\Core;
 
 class Session

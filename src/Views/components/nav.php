@@ -1,5 +1,6 @@
 <?php
 use Wandervafla\PhpBlog\Core\Session;
+
 ?>
 
 <nav class="flex relative justify-between items-center px-5 py-3">
