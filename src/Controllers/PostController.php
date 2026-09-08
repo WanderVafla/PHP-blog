@@ -201,6 +201,7 @@ class PostController
         (bool) $isCreatedByCurrentUser = Session::isByCurrentUser($data['user_id']);
         if ($isCreatedByCurrentUser) {
             $this->postsModel->delete(['id' => $id]);
+            unlink($data['image']);
         }
         header("Location: /");
     }
