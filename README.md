@@ -4,6 +4,8 @@ Little blog site made for learning PHP. Style is not the priority — the goal o
 
 ## Stack
 
+Required to install and run this project: [PHP 8.5](https://www.php.net/downloads.php?os=linux&osvariant=linux-debian&version=8.5), [Composer](https://getcomposer.org/download/), and [TailwindCSS](#TailwindCSS).
+
 - Backend (main language): [PHP 8.5](https://www.php.net/)
 - Database: [SQLite](https://sqlite.org/)
 - Dependency manager for PHP: [Composer](https://getcomposer.org/)
@@ -20,9 +22,9 @@ php -S localhost:8000 -t public
 
 The SQLite database initializes itself automatically on first run — no manual setup needed.
 
-### TailwindCSS (optional, only if you want to edit styles)
+### TailwindCSS
 
-You need the TailwindCSS binary installed to rebuild the CSS.
+You need the TailwindCSS binary installed to build the CSS.
 
 **Arch Linux / AUR:**
 ```bash
@@ -81,7 +83,7 @@ watch-css
 - **[Home](http://localhost:8000/)** -> lists all existing posts, with a button to create a new one.
 - **Opened post** -> shows the post's title, body, and chosen category. If you're the owner of the post or an admin, you also get Edit and Remove buttons.
 - **[Create post](http://localhost:8000/createPost)** -> title, description (body of the post), category choice, and image upload. Requires login.
-- **[Profile](http://localhost:8000/profil)** -> change your user data (username, email, password). Requires login.
+- **[Profile](http://localhost:8000/profil)** -> change your user data (username, email, password), and see the list of your own posts. Requires login. (Known bug: post categories aren't shown here — see Technical notes.)
 - **[Login](http://localhost:8000/login)** -> log in to an existing account.
 - **[Register](http://localhost:8000/singup)** -> create a new user account.
 
